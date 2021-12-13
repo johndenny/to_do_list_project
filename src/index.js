@@ -1,16 +1,20 @@
 import { newProjectInput } from './newListInput';
 import { listData } from './newProjectData';
+import { listPagePrint } from './listPagePrint';
 
 const btnFilter = (event) => {
     let btnData = event.target.getAttribute('data-btn');
     console.log(btnData);
-    switch (btnData) {
-        case 'newList':
+    switch (true) {
+        case btnData === 'newList':
             newProjectInput();
             btnEvents();
             break;
-        case 'submit':
+        case btnData === 'submit':
             listData.newListData();
+            break;
+        case btnData > -1:
+            listPagePrint(btnData);
             break;
     }
 }
@@ -23,3 +27,5 @@ const btnEvents = () => {
 }
 
 btnEvents();
+
+export { btnEvents };
