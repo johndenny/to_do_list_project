@@ -1,4 +1,4 @@
-import { newProjectInput } from './newList';
+import { newProjectInput } from './newListInput';
 import { listData } from './newProjectData';
 
 const btnFilter = (event) => {
