@@ -1,6 +1,8 @@
 import { newProjectInput } from './newListInput';
 import { listData } from './newProjectData';
 import { listPagePrint } from './listPagePrint';
+import { newListPrintCont } from './newListPrint';
+import { newToDoInput } from './newToDoInput';
 
 const btnFilter = (event) => {
     let btnData = event.target.getAttribute('data-btn');
@@ -13,8 +15,18 @@ const btnFilter = (event) => {
         case btnData === 'submit':
             listData.newListData();
             break;
+        case btnData === 'submitToDo':
+            listData.newToDoData();
+            btnEvents();
+            break;
+        case btnData === 'newToDo':
+            newToDoInput(btnData);
+            btnEvents();
+            break;
         case btnData > -1:
+            listData.newToDoPrint(btnData);
             listPagePrint(btnData);
+            btnEvents();
             break;
     }
 }
@@ -26,6 +38,7 @@ const btnEvents = () => {
         }
 }
 
+newListPrintCont.newListPrint();
 btnEvents();
 
 export { btnEvents };
