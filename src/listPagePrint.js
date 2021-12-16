@@ -26,9 +26,14 @@ const listPagePrint = (pageNum) => {
         toDo.setAttribute('data-page', listData.selectedToDo[i].page);
         toDo.setAttribute('type','checkbox')
         content.appendChild(toDo);
+        if (listData.selectedToDo[i].status == 'complete') {
+            toDo.checked = true;
+        } else {
+            toDo.checked = false;
+        }
         let label = document.createElement('label');
         label.setAttribute('for','toDo');
-        label.innerHTML = listData.selectedToDo[i].text + listData.selectedToDo[i].date;
+        label.innerHTML = listData.selectedToDo[i].status + listData.selectedToDo[i].text + listData.selectedToDo[i].date + listData.selectedToDo[i].priority;
         content.appendChild(label);
     }
     checkBoxValid();

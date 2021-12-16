@@ -22,35 +22,34 @@ const listData = {
             newListPrintCont.newListPrint();
         } else {
             newProjectInput('Title is too Short')
-        }
-        
+        }   
     },
     newToDoData: () => {
         let newToDo = document.querySelector('#toDoInput').value;
         let toDoDate = document.querySelector('#toDoDate').value;
         let page = document.querySelector('#newToDo').getAttribute('data-page');
-        if (newToDo.length < 3) {
-            listData.newToDoPrint(page);
-            listPagePrint(page);
-            newToDoInput('Text is too Short');
-        } else {
-            let result = listData.findToDo(newToDo,page);
-            console.log(result);
-            if (result == -1) {
-                let toDo = listData.toDoFactory(page,newToDo,toDoDate);
+        let toDoPriority = document.querySelector('#toDoPriority').checked;
+        let result = listData.findToDo(newToDo,page);
+        console.log(toDoPriority);
+        switch (true) {
+            case newToDo.length < 3: 
+                listData.newToDoPrint(page);
+                listPagePrint(page);
+                newToDoInput('Text is too Short');
+                break;
+            case result !== -1 :
+                listData.newToDoPrint(page);
+                listPagePrint(page);
+                newToDoInput('To Do Already in Use');
+                break;
+            default :
+                let toDo = listData.toDoFactory(page,newToDo,toDoDate,'',toDoPriority);
                 listData.toDoArray.push(toDo);
                 listData.newToDoPrint(page);
                 listPagePrint(page);
                 console.table(listData.toDoArray);
-            } else {
-                listData.newToDoPrint(page);
-                listPagePrint(page);
-                newToDoInput('To Do Already in Use');
-            }
+                break;
         }
-        
-        
-
     },
     findToDo: (text,page) => {
         let result = listData.toDoArray.findIndex(function(arr){
@@ -68,8 +67,8 @@ const listData = {
     listFactory: (title,desc) => {
         return {title,desc};
     },
-    toDoFactory: (page,text,date) => {
-        return {page,text,date};
+    toDoFactory: (page,text,date,status,priority) => {
+        return {page,text,date,status,priority};
     }
 }
 

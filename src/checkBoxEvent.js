@@ -10,14 +10,18 @@ const checkBoxValid = () => {
             checkbox[i].addEventListener('change', function() {
                 if (this.checked) {
                     let toDo = listData.findToDo(text,page);
-                    listData.historyToDo.push(listData.toDoArray[toDo]);
-                    listData.toDoArray.splice(toDo,1);
+                    listData.toDoArray[toDo].status = 'complete';
                     listData.newToDoPrint(page);
                     listPagePrint(page);
                     btnEvents();
                     console.table(listData.historyToDo);
                 } else {
-                    console.log('unchecked')
+                    let toDo = listData.findToDo(text,page);
+                    listData.toDoArray[toDo].status = '';
+                    listData.newToDoPrint(page);
+                    listPagePrint(page);
+                    btnEvents();
+                    console.table(listData.historyToDo);
                 }
             });
         }
