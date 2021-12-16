@@ -1,6 +1,6 @@
 import { newListPrintCont } from "./newListPrint";
 
-const newProjectInput = () => {
+const newProjectInput = (placeholder) => {
     const div = document.querySelector('#content');
     newListPrintCont.removeAllChildNodes(div);
 
@@ -9,7 +9,7 @@ const newProjectInput = () => {
     div.appendChild(titleInput);
     titleInput.setAttribute('id', 'listTitleInput')
     titleInput.setAttribute('type', 'text');
-    titleInput.setAttribute('placeholder', 'New Project Name');
+    titleInput.setAttribute('placeholder', placeholder);
     let descInput = document.createElement('INPUT');
     div.appendChild(descInput);
     descInput.setAttribute('id', 'listDescInput');

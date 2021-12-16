@@ -1,6 +1,6 @@
 const newToDoInput = (placeholder) => {
     const div = document.querySelector('#content');
-
+    
     //To Do Input
     let toDoInput = document.createElement('INPUT');
     toDoInput.setAttribute('id', 'toDoInput');

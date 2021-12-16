@@ -6,15 +6,15 @@ import { newToDoInput } from './newToDoInput';
 
 const btnFilter = (event) => {
     let btnData = event.target.getAttribute('data-btn');
-    
     console.log(btnData);
     switch (true) {
         case btnData === 'newList':
-            newProjectInput();
+            newProjectInput('New List Name');
             btnEvents();
             break;
         case btnData === 'submit':
             listData.newListData();
+            btnEvents();
             break;
         case btnData === 'submitToDo':
             listData.newToDoData();

@@ -1,6 +1,7 @@
 import { newListPrintCont } from './newListPrint';
 import { listPagePrint } from './listPagePrint';
 import { newToDoInput } from './newToDoInput';
+import { newProjectInput } from './newListInput';
 
 const listData = {
     listsArray: [
@@ -14,10 +15,15 @@ const listData = {
     newListData: () => {
         let newListTitle = document.querySelector('#listTitleInput').value;
         let newListDesc = document.querySelector('#listDescInput').value;
-        let list = listData.listFactory(newListTitle,newListDesc);
-        listData.listsArray.push(list);
-        console.table(listData.listsArray);
-        newListPrintCont.newListPrint();
+        if (newListTitle.length >= 3) {
+            let list = listData.listFactory(newListTitle,newListDesc);
+            listData.listsArray.push(list);
+            console.table(listData.listsArray);
+            newListPrintCont.newListPrint();
+        } else {
+            newProjectInput('Title Too Short')
+        }
+        
     },
     newToDoData: () => {
         let newToDo = document.querySelector('#toDoInput').value;
@@ -34,7 +40,7 @@ const listData = {
         } else {
             listData.newToDoPrint(page);
             listPagePrint(page);
-            newToDoInput('To Do Already in Use','red');
+            newToDoInput('To Do Already in Use');
         }
         
 
