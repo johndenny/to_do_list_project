@@ -6,6 +6,7 @@ import { newToDoInput } from './newToDoInput';
 
 const btnFilter = (event) => {
     let btnData = event.target.getAttribute('data-btn');
+    
     console.log(btnData);
     switch (true) {
         case btnData === 'newList':
@@ -20,7 +21,10 @@ const btnFilter = (event) => {
             btnEvents();
             break;
         case btnData === 'newToDo':
-            newToDoInput(btnData);
+            let btnPage = document.querySelector('#newToDo').getAttribute('data-page');
+            listData.newToDoPrint(btnPage);
+            listPagePrint(btnPage);
+            newToDoInput('New To Do');
             btnEvents();
             break;
         case btnData > -1:

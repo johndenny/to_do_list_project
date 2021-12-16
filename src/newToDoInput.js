@@ -1,11 +1,11 @@
-const newToDoInput = (pageNum) => {
+const newToDoInput = (placeholder) => {
     const div = document.querySelector('#content');
 
     //To Do Input
     let toDoInput = document.createElement('INPUT');
     toDoInput.setAttribute('id', 'toDoInput');
     toDoInput.setAttribute('type', 'text');
-    toDoInput.setAttribute('placeholder', 'New To Do');
+    toDoInput.setAttribute('placeholder', placeholder);
     div.appendChild(toDoInput);
 
     //Date

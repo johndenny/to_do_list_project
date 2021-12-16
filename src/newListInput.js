@@ -1,5 +1,8 @@
+import { newListPrintCont } from "./newListPrint";
+
 const newProjectInput = () => {
     const div = document.querySelector('#content');
+    newListPrintCont.removeAllChildNodes(div);
 
     // Porject Name & Desc Input
     let titleInput = document.createElement('INPUT');

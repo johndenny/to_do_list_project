@@ -9,7 +9,7 @@ const checkBoxValid = () => {
             let page = checkbox[i].getAttribute('data-page');
             checkbox[i].addEventListener('change', function() {
                 if (this.checked) {
-                    let toDo = listData.findToDo(text);
+                    let toDo = listData.findToDo(text,page);
                     listData.historyToDo.push(listData.toDoArray[toDo]);
                     listData.toDoArray.splice(toDo,1);
                     listData.newToDoPrint(page);

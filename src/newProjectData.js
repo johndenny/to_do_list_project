@@ -1,5 +1,6 @@
 import { newListPrintCont } from './newListPrint';
 import { listPagePrint } from './listPagePrint';
+import { newToDoInput } from './newToDoInput';
 
 const listData = {
     listsArray: [
@@ -22,16 +23,25 @@ const listData = {
         let newToDo = document.querySelector('#toDoInput').value;
         let toDoDate = document.querySelector('#toDoDate').value;
         let page = document.querySelector('#newToDo').getAttribute('data-page');
-        let toDo = listData.toDoFactory(page,newToDo,toDoDate);
-        listData.toDoArray.push(toDo);
-        listData.newToDoPrint(page);
-        listPagePrint(page);
-        console.table(listData.toDoArray);
+        let result = listData.findToDo(newToDo,page);
+        console.log(result);
+        if (result == -1) {
+            let toDo = listData.toDoFactory(page,newToDo,toDoDate);
+            listData.toDoArray.push(toDo);
+            listData.newToDoPrint(page);
+            listPagePrint(page);
+            console.table(listData.toDoArray);
+        } else {
+            listData.newToDoPrint(page);
+            listPagePrint(page);
+            newToDoInput('To Do Already in Use','red');
+        }
+        
 
     },
-    findToDo: (text) => {
+    findToDo: (text,page) => {
         let result = listData.toDoArray.findIndex(function(arr){
-            return arr.text == text
+            return arr.text == text && arr.page == page;
         });
         return result;
     },
