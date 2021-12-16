@@ -1,5 +1,6 @@
 import { newListPrintCont } from './newListPrint';
 import { listData } from './newProjectData';
+import { checkBoxValid } from './checkBoxEvent';
 
 const listPagePrint = (pageNum) => {
 
@@ -21,13 +22,17 @@ const listPagePrint = (pageNum) => {
     for (let i = 0; i < listData.selectedToDo.length; i++) {
         let toDo = document.createElement('INPUT');
         toDo.setAttribute('id','toDo');
+        toDo.setAttribute('data-text', listData.selectedToDo[i].text);
+        toDo.setAttribute('data-page', listData.selectedToDo[i].page);
         toDo.setAttribute('type','checkbox')
         content.appendChild(toDo);
         let label = document.createElement('label');
         label.setAttribute('for','toDo');
-        label.innerHTML = listData.selectedToDo[i].text;
+        label.innerHTML = listData.selectedToDo[i].text + listData.selectedToDo[i].date;
         content.appendChild(label);
     }
+    checkBoxValid();
+    
     
 
     //New to-do Button

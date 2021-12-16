@@ -9,6 +9,7 @@ const listData = {
     ],
     toDoArray: [],
     selectedToDo: [],
+    historyToDo: [],
     newListData: () => {
         let newListTitle = document.querySelector('#listTitleInput').value;
         let newListDesc = document.querySelector('#listDescInput').value;
@@ -28,9 +29,15 @@ const listData = {
         console.table(listData.toDoArray);
 
     },
+    findToDo: (text) => {
+        let result = listData.toDoArray.findIndex(function(arr){
+            return arr.text == text
+        });
+        return result;
+    },
     newToDoPrint: (pageNum) => {
-        let result = listData.toDoArray.filter(function(pg){
-            return pg.page == pageNum;
+        let result = listData.toDoArray.filter(function(arr){
+            return arr.page == pageNum;
         });
         listData.selectedToDo = result;
         console.table(listData.selectedToDo)
