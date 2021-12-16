@@ -21,7 +21,7 @@ const listData = {
             console.table(listData.listsArray);
             newListPrintCont.newListPrint();
         } else {
-            newProjectInput('Title Too Short')
+            newProjectInput('Title is too Short')
         }
         
     },
@@ -29,19 +29,26 @@ const listData = {
         let newToDo = document.querySelector('#toDoInput').value;
         let toDoDate = document.querySelector('#toDoDate').value;
         let page = document.querySelector('#newToDo').getAttribute('data-page');
-        let result = listData.findToDo(newToDo,page);
-        console.log(result);
-        if (result == -1) {
-            let toDo = listData.toDoFactory(page,newToDo,toDoDate);
-            listData.toDoArray.push(toDo);
+        if (newToDo.length < 3) {
             listData.newToDoPrint(page);
             listPagePrint(page);
-            console.table(listData.toDoArray);
+            newToDoInput('Text is too Short');
         } else {
-            listData.newToDoPrint(page);
-            listPagePrint(page);
-            newToDoInput('To Do Already in Use');
+            let result = listData.findToDo(newToDo,page);
+            console.log(result);
+            if (result == -1) {
+                let toDo = listData.toDoFactory(page,newToDo,toDoDate);
+                listData.toDoArray.push(toDo);
+                listData.newToDoPrint(page);
+                listPagePrint(page);
+                console.table(listData.toDoArray);
+            } else {
+                listData.newToDoPrint(page);
+                listPagePrint(page);
+                newToDoInput('To Do Already in Use');
+            }
         }
+        
         
 
     },
