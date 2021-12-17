@@ -3,6 +3,7 @@ import { newListPrintCont } from './newListPrint';
 
 const titlePage = {
     titlePrint: (pageNum) => {
+        console.log(pageNum);
         //Title & Description
         let titleCont = document.createElement('div');
         titleCont.setAttribute('id', 'titleCont');
@@ -44,6 +45,14 @@ const titlePage = {
         submitBtn.setAttribute('data-btn', 'submitEdit');
         submitBtn.setAttribute('data-page', pageNum);
         div.appendChild(submitBtn);
+    },
+    titleDelete: (pageNum) => {
+        let deleteBtn = document.createElement('button');
+        deleteBtn.setAttribute('id','titleDeleteBtn');
+        deleteBtn.setAttribute('data-btn','listDelete');
+        deleteBtn.setAttribute('data-page',pageNum);
+        deleteBtn.innerHTML = 'Delete';
+        titleCont.prepend(deleteBtn);
     }
 };
 

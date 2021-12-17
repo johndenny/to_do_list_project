@@ -34,6 +34,9 @@ const listData = {
             newProjectInput('Title is too Short')
         }   
     },
+    listDelete: (pageNum) => {
+        listData.listsArray.splice(pageNum,1);
+    },
     newToDoData: () => {
         let newToDo = document.querySelector('#toDoInput').value;
         let toDoDate = document.querySelector('#toDoDate').value;

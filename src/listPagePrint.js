@@ -4,7 +4,7 @@ import { checkBoxValid } from './checkBoxEvent';
 import { titlePage } from './titlePagePrint'
 
 const listPagePrint = (pageNum) => {
-
+    console.log(pageNum);
     //Remove Children
     const content = document.querySelector('#content');
     newListPrintCont.removeAllChildNodes(content);
