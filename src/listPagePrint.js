@@ -1,6 +1,7 @@
 import { newListPrintCont } from './newListPrint';
 import { listData } from './newProjectData';
 import { checkBoxValid } from './checkBoxEvent';
+import { titlePage } from './titlePagePrint'
 
 const listPagePrint = (pageNum) => {
 
@@ -8,15 +9,7 @@ const listPagePrint = (pageNum) => {
     const content = document.querySelector('#content');
     newListPrintCont.removeAllChildNodes(content);
 
-    //Title & Description
-    let titleSpan = document.createElement('SPAN');
-    content.appendChild(titleSpan);
-    titleSpan.setAttribute('id', 'listTitle');
-    titleSpan.innerHTML = listData.listsArray[pageNum].title;
-    let descSpan = document.createElement('SPAN');
-    content.appendChild(descSpan);
-    descSpan.setAttribute('id','listdesc');
-    descSpan.innerHTML = listData.listsArray[pageNum].desc;
+    titlePage.titlePrint(pageNum);
 
     
     for (let i = 0; i < listData.selectedToDo.length; i++) {

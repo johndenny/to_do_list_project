@@ -3,25 +3,32 @@ import { listData } from './newProjectData';
 import { listPagePrint } from './listPagePrint';
 import { newListPrintCont } from './newListPrint';
 import { newToDoInput } from './newToDoInput';
+import { titlePage } from './titlePagePrint';
 
 const btnFilter = (event) => {
     let btnData = event.target.getAttribute('data-btn');
+    let btnPage = event.target.getAttribute('data-page');
     console.log(btnData);
+    console.log(btnPage);
     switch (true) {
         case btnData === 'newList':
-            newProjectInput('New List Name');
+            newProjectInput('List Title','List Description');
             btnEvents();
             break;
         case btnData === 'submit':
             listData.newListData();
+            newListPrintCont.newListPrint(btnPage);
             btnEvents();
             break;
         case btnData === 'submitToDo':
             listData.newToDoData();
             btnEvents();
             break;
+        case btnData === 'submitEdit':
+            listData.listEditData(btnPage)
+            newListPrintCont.newListPrint(btnPage);
+            break;
         case btnData === 'newToDo':
-            let btnPage = document.querySelector('#newToDo').getAttribute('data-page');
             listData.newToDoPrint(btnPage);
             listPagePrint(btnPage);
             newToDoInput('New To Do');
@@ -32,6 +39,10 @@ const btnFilter = (event) => {
             listPagePrint(btnData);
             btnEvents();
             break;
+        case btnData === 'titleEdit':
+            titlePage.titleEditInput(btnPage);
+            btnEvents();
+
     }
 }
 
@@ -42,7 +53,7 @@ const btnEvents = () => {
         }
 }
 
-newListPrintCont.newListPrint();
+newListPrintCont.newListPrint(1);
 btnEvents();
 
 export { btnEvents };

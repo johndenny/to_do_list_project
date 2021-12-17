@@ -3,10 +3,9 @@ import { btnEvents } from './index';
 import { listPagePrint } from './listPagePrint';
 
 const newListPrintCont = {
-    newListPrint: () => { 
-        let page = listData.listsArray.length-1;
-        listData.newToDoPrint(page);
-        listPagePrint(page);
+    newListPrint: (pageNum) => { 
+        listData.newToDoPrint(pageNum);
+        listPagePrint(pageNum);
         const listBtns = document.querySelector('#listBtns');
         newListPrintCont.removeAllChildNodes(listBtns);
         for (let i=0;i<listData.listsArray.length;i++) {

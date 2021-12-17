@@ -19,7 +19,17 @@ const listData = {
             let list = listData.listFactory(newListTitle,newListDesc);
             listData.listsArray.push(list);
             console.table(listData.listsArray);
-            newListPrintCont.newListPrint();
+        } else {
+            newProjectInput('Title is too Short')
+        }   
+    },
+    listEditData: (pageNum) => {
+        let listTitle = document.querySelector('#listTitleInput').value;
+        let listDesc = document.querySelector('#listDescInput').value;
+        if (listTitle.length >= 3) {
+            listData.listsArray[pageNum].title = listTitle;
+            listData.listsArray[pageNum].desc = listDesc;
+            console.table(listData.listsArray);
         } else {
             newProjectInput('Title is too Short')
         }   
