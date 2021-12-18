@@ -62,12 +62,12 @@ const listData = {
             case newToDo.length < 3: 
                 listData.newToDoPrint(page);
                 listPagePrint(page);
-                newToDoInput('Text is too Short');
+                newToDoInput(page);
                 break;
             case result !== -1 :
                 listData.newToDoPrint(page);
                 listPagePrint(page);
-                newToDoInput('To Do Already in Use');
+                newToDoInput(page);
                 break;
             default :
                 let toDo = listData.toDoFactory(page,newToDo,toDoDate,'',toDoPriority);

@@ -4,12 +4,12 @@ import { listPagePrint } from './listPagePrint';
 import { newListPrintCont } from './newListPrint';
 import { newToDoInput } from './newToDoInput';
 import { titlePage } from './titlePagePrint';
+import { editToDoInput } from './editToDoInput';
 
 const btnFilter = (event) => {
     let btnData = event.target.getAttribute('data-btn');
     let btnPage = event.target.getAttribute('data-page');
     console.log(btnData);
-    console.log(btnPage);
     switch (true) {
         case btnData === 'newList':
             newProjectInput('List Title');
@@ -20,7 +20,7 @@ const btnFilter = (event) => {
             newListPrintCont.newListPrint(btnPage);
             btnEvents();
             break;
-        case btnData === 'submitToDo':
+        case btnData === 'saveToDo':
             listData.newToDoData();
             btnEvents();
             break;
@@ -29,9 +29,7 @@ const btnFilter = (event) => {
             newListPrintCont.editListPrint(btnPage);
             break;
         case btnData === 'newToDo':
-            // listData.newToDoPrint(btnPage);
-            // listPagePrint(btnPage);
-            newToDoInput('New To Do');
+            newToDoInput(btnPage);
             btnEvents();
             break;
         case btnData > -1:
@@ -39,9 +37,12 @@ const btnFilter = (event) => {
             listPagePrint(btnData);
             btnEvents();
             break;
-        case btnData === 'titleEdit':
-            titlePage.titleEditInput(btnPage);
-            titlePage.titleDelete(btnPage);
+        case btnData === 'titleEditBtn':
+            titlePage.editListTitleInputPrint(btnPage);
+            btnEvents();
+            break;
+        case btnData === 'descEditBtn':
+            titlePage.editListDescInputPrint(btnPage);
             btnEvents();
             break;
         case btnData === 'listDelete':
@@ -49,11 +50,10 @@ const btnFilter = (event) => {
             newListPrintCont.deleteListPrint();
             break;
         case btnData ==='toDoEdit':
-            let btnText = event.target.getAttribute('data-text');
-            let results = listData.findToDo(btnText,btnPage);
-            console.log(results)
-
-
+            let index = event.target.getAttribute('data-index');
+            editToDoInput(index,btnPage);
+            btnEvents();
+            break;
     }
 }
 

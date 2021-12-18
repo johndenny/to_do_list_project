@@ -1,13 +1,23 @@
+import { listPagePrint } from "./listPagePrint";
 import { newListPrintCont } from "./newListPrint";
 
-const newToDoInput = (placeholder) => {
-    newListPrintCont.removeAllChildNodes(toDoInputCont);
+const newToDoInput = (page,) => {
+    if (document.querySelector('#toDoInput') !== null) {
+        return listPagePrint(page);
+    }
+    listPagePrint(page);
+
+    const toDoCont = document.querySelector('#toDoCont');
+    let toDoInputCont = document.createElement('P');
+    toDoInputCont.setAttribute('id','toDoInputCont');
+    toDoCont.appendChild(toDoInputCont);
+    
 
     //To Do Input
     let toDoInput = document.createElement('INPUT');
     toDoInput.setAttribute('id', 'toDoInput');
     toDoInput.setAttribute('type', 'text');
-    toDoInput.setAttribute('placeholder', placeholder);
+    toDoInput.setAttribute('placeholder', 'New To Do');
     toDoInputCont.appendChild(toDoInput);
 
     //Date
@@ -28,10 +38,10 @@ const newToDoInput = (placeholder) => {
     
 
     //Button
-    let submitBtn = document.createElement('button');
-    submitBtn.innerHTML = 'submit';
-    submitBtn.setAttribute('data-btn', 'submitToDo');
-    toDoInputCont.appendChild(submitBtn);
+    let saveBtn = document.createElement('button');
+    saveBtn.innerHTML = 'save';
+    saveBtn.setAttribute('data-btn', 'saveToDo');
+    toDoInputCont.appendChild(saveBtn);
 }
 
 
