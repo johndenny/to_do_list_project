@@ -9,7 +9,18 @@ const listData = {
         {title: 'My Work Project', desc: 'my project to make money.'}, 
         {title: 'My New Hobby', desc: 'my new hobby is so cool!'}
     ],
-    toDoArray: [],
+    toDoArray: [
+        {page: '0', text: 'do this', date: '2021-12-17', status: '', priority: true},
+        {page: '0', text: 'do that', date: '2021-12-17', status: '', priority: true},
+        {page: '0', text: 'find this', date: '2021-12-17', status: '', priority: true},
+        {page: '1', text: 'buy that', date: '2021-12-17', status: '', priority: true},
+        {page: '1', text: 'go there', date: '2021-12-17', status: '', priority: true},
+        {page: '1', text: 'go here', date: '2021-12-17', status: '', priority: true},
+        {page: '2', text: 'make this', date: '2021-12-17', status: '', priority: true},
+        {page: '2', text: 'make that', date: '2021-12-17', status: '', priority: true},
+        {page: '2', text: 'meet them', date: '2021-12-17', status: '', priority: true},
+        {page: '2', text: 'take that', date: '2021-12-17', status: '', priority: true}
+    ],
     selectedToDo: [],
     historyToDo: [],
     newListData: () => {
@@ -19,6 +30,9 @@ const listData = {
             let list = listData.listFactory(newListTitle,newListDesc);
             listData.listsArray.push(list);
             console.table(listData.listsArray);
+            let page = listData.listsArray.length-1;
+            listData.newToDoPrint(page);
+            listPagePrint(page);
         } else {
             newProjectInput('Title is too Short')
         }   

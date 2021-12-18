@@ -1,8 +1,4 @@
-import { newListPrintCont } from "./newListPrint";
-
-const newToDoInput = (placeholder) => {
-    newListPrintCont.removeAllChildNodes(toDoInputCont);
-
+const editToDoInput = (placeholder) => {
     //To Do Input
     let toDoInput = document.createElement('INPUT');
     toDoInput.setAttribute('id', 'toDoInput');
@@ -34,6 +30,4 @@ const newToDoInput = (placeholder) => {
     toDoInputCont.appendChild(submitBtn);
 }
 
-
-
-export { newToDoInput };
+export { editToDoInput };

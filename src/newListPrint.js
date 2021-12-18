@@ -4,9 +4,6 @@ import { listPagePrint } from './listPagePrint';
 
 const newListPrintCont = {
     newListPrint: () => {
-        let page = listData.listsArray.length-1;
-        listData.newToDoPrint(page);
-        listPagePrint(page);
         const listBtns = document.querySelector('#listBtns');
         newListPrintCont.removeAllChildNodes(listBtns);
         for (let i=0;i<listData.listsArray.length;i++) {

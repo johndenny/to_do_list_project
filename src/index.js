@@ -12,7 +12,7 @@ const btnFilter = (event) => {
     console.log(btnPage);
     switch (true) {
         case btnData === 'newList':
-            newProjectInput();
+            newProjectInput('List Title');
             btnEvents();
             break;
         case btnData === 'submit':
@@ -29,8 +29,8 @@ const btnFilter = (event) => {
             newListPrintCont.editListPrint(btnPage);
             break;
         case btnData === 'newToDo':
-            listData.newToDoPrint(btnPage);
-            listPagePrint(btnPage);
+            // listData.newToDoPrint(btnPage);
+            // listPagePrint(btnPage);
             newToDoInput('New To Do');
             btnEvents();
             break;
@@ -48,6 +48,10 @@ const btnFilter = (event) => {
             listData.listDelete(btnPage);
             newListPrintCont.deleteListPrint();
             break;
+        case btnData ==='toDoEdit':
+            let btnText = event.target.getAttribute('data-text');
+            let results = listData.findToDo(btnText,btnPage);
+            console.log(results)
 
 
     }
@@ -60,7 +64,7 @@ const btnEvents = () => {
         }
 }
 
-newListPrintCont.newListPrint(1);
+newListPrintCont.deleteListPrint();
 btnEvents();
 
 export { btnEvents };
