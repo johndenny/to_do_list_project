@@ -15,8 +15,9 @@ const listPagePrint = (pageNum) => {
     let toDoCont = document.createElement('div');
     toDoCont.setAttribute('id', 'toDoCont');
     content.appendChild(toDoCont);
-    
+
     toDoListPrint();
+
     
     //New to-do Button
     let btn = document.createElement('button');

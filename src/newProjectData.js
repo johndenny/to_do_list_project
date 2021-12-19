@@ -13,6 +13,11 @@ const listData = {
     toDoArray: [],
     selectedToDo: [],
     historyToDo: [],
+    selectedToDoSort: () => {
+        listData.selectedToDo.sort(function(a,b){
+            return a.dateValue - b.dateValue;
+        });
+    },
     newListData: () => {
         let newListTitle = document.querySelector('#listTitleInput').value;
         let newListDesc = document.querySelector('#listDescInput').value;
@@ -66,7 +71,10 @@ const listData = {
         let newToDo = document.querySelector('#toDoInput').value;
         let toDoLetterCount = newToDo.split(' ').join('');
         let toDoDate = document.querySelector('#toDoDate').value;
-        let toDoDateComma = toDoDate.split('-').join(', ');
+        let dateAdd = toDoDate.split('-').join('');
+        let dateValue = parseInt(dateAdd);
+        let todayValue = new Date().toISOString().slice(0,10).split('-').join('');
+        let daysUntilDue = dateValue - parseInt(todayValue);
         let toDoPriority = document.querySelector('#toDoPriority').checked;
         let inputCont = document.querySelector('#toDoInputCont');
         let errCont = document.createElement('div');
@@ -78,7 +86,7 @@ const listData = {
             errSpan.innerHTML = 'To Do is too short.'
             cont.appendChild(errSpan);
         } else {
-            let toDo = listData.toDoFactory(page,newToDo,toDoDateComma,'',toDoPriority);
+            let toDo = listData.toDoFactory(page,newToDo,toDoDate,dateValue,daysUntilDue,'',toDoPriority);
             listData.toDoArray.push(toDo);
             listData.newToDoPrint(page);
             listPagePrint(page);
@@ -89,6 +97,10 @@ const listData = {
         let newToDo = document.querySelector('#editToDoInput').value;
         let toDoLetterCount = newToDo.split(' ').join('');
         let toDoDate = document.querySelector('#toDoDate').value;
+        let dateRemove = toDoDate.split('-').join('');
+        let dateValueNum = parseInt(dateRemove);
+        let todayValue = new Date().toISOString().slice(0,10).split('-').join('');
+        let editDaysUntilDue = dateValueNum - parseInt(todayValue);
         let toDoPriority = document.querySelector('#toDoPriority').checked;
         let id = document.querySelector('#saveEditToDoBtn').getAttribute('data-id');
         let idResult = listData.findId(id);
@@ -103,6 +115,8 @@ const listData = {
                     cont.appendChild(errSpan);
         } else {
             console.log(idResult);
+                listData.toDoArray[idResult].daysTilDue = editDaysUntilDue;
+                listData.toDoArray[idResult].dateValue = dateValueNum;
                 listData.toDoArray[idResult].text = newToDo;
                 listData.toDoArray[idResult].date = toDoDate;
                 if (toDoPriority) {
@@ -132,18 +146,19 @@ const listData = {
             return arr.page == pageNum;
         });
         listData.selectedToDo = result;
+        listData.selectedToDoSort();
         console.table(listData.selectedToDo)
     },
     listFactory: (title,desc) => {
         return {title,desc};
     },
-    toDoFactory: (page,text,date,status,priority) => {
+    toDoFactory: (page,text,date,dateValue,daysTilDue,status,priority) => {
         let id = Math.floor(Math.random()*999);
         let copyCheck = listData.findId(id);
         while (copyCheck !== -1) {
             return id = Math.floor(Math.random()*999);
         }
-        return {id,page,text,date,status,priority};
+        return {id,page,text,date,dateValue,daysTilDue,status,priority};
     }
 }
 

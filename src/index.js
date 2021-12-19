@@ -100,5 +100,6 @@ listData.toDoArray.push(dummy11);
 let dummy12 = listData.toDoFactory('0','find an alternative to this','2021-12-17','',false);
 listData.toDoArray.push(dummy12);
 
+console.log(new Date().toISOString().slice(0,10).split('-').join(''));
 
 export { btnEvents };
