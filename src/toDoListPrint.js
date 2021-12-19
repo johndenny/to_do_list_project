@@ -1,6 +1,7 @@
 import { listData } from './newProjectData';
 import { checkBoxValid } from './checkBoxEvent';
 import { titlePage } from './titlePagePrint';
+import { editToDoInput } from './editToDoInput';
 
 const toDoListPrint = () => {
     for (let i = 0; i < listData.selectedToDo.length; i++) {
@@ -15,6 +16,7 @@ const toDoListPrint = () => {
         toDo.setAttribute('id','toDo');
         toDo.setAttribute('data-text', listData.selectedToDo[i].text);
         toDo.setAttribute('data-page', listData.selectedToDo[i].page);
+        toDo.setAttribute('data-id', listData.selectedToDo[i].id);
         toDo.setAttribute('type','checkbox')
         text.prepend(toDo);
         if (listData.selectedToDo[i].status == 'complete') {

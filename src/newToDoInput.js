@@ -41,6 +41,7 @@ const newToDoInput = (page,) => {
     let saveBtn = document.createElement('button');
     saveBtn.innerHTML = 'save';
     saveBtn.setAttribute('data-btn', 'saveToDo');
+    saveBtn.setAttribute('data-page', page);
     toDoInputCont.appendChild(saveBtn);
 }
 

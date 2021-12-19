@@ -5,13 +5,17 @@ const newProjectInput = (placeholder) => {
     newListPrintCont.removeAllChildNodes(div);
 
     // Porject Name & Desc Input
+    let titleCont = document.createElement('H3');
+    div.appendChild(titleCont);
     let titleInput = document.createElement('INPUT');
-    div.appendChild(titleInput);
+    titleCont.appendChild(titleInput);
     titleInput.setAttribute('id', 'listTitleInput')
     titleInput.setAttribute('type', 'text');
     titleInput.setAttribute('placeholder', placeholder);
+    let descCont = document.createElement('P');
+    div.appendChild(descCont);
     let descInput = document.createElement('INPUT');
-    div.appendChild(descInput);
+    descCont.appendChild(descInput);
     descInput.setAttribute('id', 'listDescInput');
     descInput.setAttribute('type', 'text');
     descInput.setAttribute('placeholder', 'List Description');
@@ -19,7 +23,7 @@ const newProjectInput = (placeholder) => {
     submitBtn.innerHTML = 'submit';
     submitBtn.setAttribute('data-btn', 'submit');
     // submitBtn.setAttribute('data-page', pageNum);
-    div.appendChild(submitBtn);
+    descCont.appendChild(submitBtn);
 }
 
 export { newProjectInput };

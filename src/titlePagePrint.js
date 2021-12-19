@@ -36,33 +36,6 @@ const titlePage = {
         desceditBtn.innerHTML = 'Edit';
         descPara.appendChild(desceditBtn);
     },
-    titleEditInput: (pageNum) => {
-        const div = document.querySelector('#titleCont');
-        newListPrintCont.removeAllChildNodes(div);
-
-        // List Edit Name & Desc Input
-        let origTitle = listData.listsArray[pageNum].title;
-        let origDesc = listData.listsArray[pageNum].desc;
-        let titleInput = document.createElement('INPUT');
-        div.appendChild(titleInput);
-        titleInput.setAttribute('id', 'listTitleInput')
-        titleInput.setAttribute('type', 'text');
-        titleInput.setAttribute('value', origTitle);
-        let descInput = document.createElement('INPUT');
-        div.appendChild(descInput);
-        descInput.setAttribute('id', 'listDescInput');
-        descInput.setAttribute('type', 'text');
-        if (origDesc === '') {
-            descInput.setAttribute('placeholder', 'Description');
-        } else {
-            descInput.setAttribute('value', origDesc);
-        }
-        let submitBtn = document.createElement('button');
-        submitBtn.innerHTML = 'submit';
-        submitBtn.setAttribute('data-btn', 'submitEdit');
-        submitBtn.setAttribute('data-page', pageNum);
-        div.appendChild(submitBtn);
-    },
     titleDelete: (pageNum) => {
         let deleteBtn = document.createElement('button');
         deleteBtn.setAttribute('id','titleDeleteBtn');
@@ -70,16 +43,6 @@ const titlePage = {
         deleteBtn.setAttribute('data-page',pageNum);
         deleteBtn.innerHTML = 'Delete';
         titleCont.prepend(deleteBtn);
-    },
-    editEvents: () => {
-        let listTitle = document.querySelector('#listTitle');
-        let listDesc = document.querySelector('#listDesc');
-        listTitle.addEventListener('click', titlePage.editListInputPrint);
-        listDesc.addEventListener('click', titlePage.editListInputPrint);
-        const toDos = document.querySelectorAll('#ToDoText');
-        for (let i=0;i<toDos.length;i++) {
-            toDos[i].addEventListener('click', editToDoInput);
-        }
     },
     editListTitleInputPrint: (page) => {
         let titleCont = document.querySelector('#titleCont');
@@ -112,6 +75,9 @@ const titlePage = {
         descEditBtn.setAttribute('data-page', listData.selectedToDo[page].page);
         descEditBtn.innerHTML = 'Edit';
         descPara.appendChild(descEditBtn);
+        let titleErrCont = document.createElement('div');
+        titleErrCont.setAttribute('id', 'titleErrCont');
+        titleHeader.appendChild(titleErrCont);
         btnEvents();
     },
     editListDescInputPrint: (page) => {

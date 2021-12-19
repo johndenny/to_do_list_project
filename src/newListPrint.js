@@ -21,8 +21,7 @@ const newListPrintCont = {
             parent.removeChild(parent.firstChild);
         }
     },
-    editListPrint: (pageNum) => {
-        listPagePrint(pageNum);
+    editListPrint: () => {
         const listBtns = document.querySelector('#listBtns');
         newListPrintCont.removeAllChildNodes(listBtns);
         for (let i=0;i<listData.listsArray.length;i++) {

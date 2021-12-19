@@ -46,7 +46,10 @@ const editToDoInput = (index,page) => {
             //Button
             let saveBtn = document.createElement('button');
             saveBtn.innerHTML = 'save';
+            saveBtn.setAttribute('id','saveEditToDoBtn')
             saveBtn.setAttribute('data-btn', 'saveEditToDo');
+            saveBtn.setAttribute('data-id', listData.selectedToDo[i].id);
+            saveBtn.setAttribute('data-page', listData.selectedToDo[i].page);
             toDoInputCont.appendChild(saveBtn);
         } else { 
             let text = document.createElement('P');
