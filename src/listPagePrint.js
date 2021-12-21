@@ -4,12 +4,19 @@ import { checkBoxValid } from './checkBoxEvent';
 import { titlePage } from './titlePagePrint'
 import { toDoListPrint } from './toDoListPrint';
 
-const listPagePrint = (pageNum) => {
+const listPagePrint = (listIndex,listId) => {
     //Remove Children
     const content = document.querySelector('#content');
     newListPrintCont.removeAllChildNodes(content);
 
-    titlePage.titlePrint(pageNum);
+    let listDeleteBtn = document.createElement('button');
+    listDeleteBtn.setAttribute('id', 'listDeleteBtn');
+    listDeleteBtn.setAttribute('data-btn', 'listDelete');
+    listDeleteBtn.setAttribute('data-listid', listId);
+    listDeleteBtn.innerText = 'delete';
+    content.appendChild(listDeleteBtn);
+
+    titlePage.titlePrint(listIndex,listId);
 
     // ToDo Container
     let toDoCont = document.createElement('div');
@@ -24,7 +31,7 @@ const listPagePrint = (pageNum) => {
     content.appendChild(btn);
     btn.setAttribute('data-btn', 'newToDo');
     btn.setAttribute('id', 'newToDo')
-    btn.setAttribute('data-page', pageNum);
+    btn.setAttribute('data-listid', listId);
     btn.innerHTML = '+ New To-Do';
 
     

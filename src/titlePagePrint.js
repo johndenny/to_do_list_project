@@ -6,7 +6,7 @@ import { toDoListPrint } from './toDoListPrint';
 import { editToDoInput } from './editToDoInput';
 
 const titlePage = {
-    titlePrint: (pageNum) => {
+    titlePrint: (listIndex,listId) => {
         //Title & Description
         let titleCont = document.createElement('div');
         titleCont.setAttribute('id', 'titleCont');
@@ -14,27 +14,34 @@ const titlePage = {
         let title = document.createElement('H3');
         titleCont.appendChild(title);
         title.setAttribute('id', 'listTitle');
-        title.setAttribute('data-page',pageNum)
-        title.innerHTML = listData.listsArray[pageNum].title;
+        title.innerHTML = listData.listsArray[listIndex].title;
         let editBtn = document.createElement('button');
         editBtn.setAttribute('id','titleEditBtn');
         editBtn.setAttribute('data-btn','titleEditBtn');
-        editBtn.setAttribute('data-text', listData.selectedToDo[pageNum].text);
-        editBtn.setAttribute('data-page', listData.selectedToDo[pageNum].page);
+        editBtn.setAttribute('data-listId', listId);
         editBtn.innerHTML = 'Edit';
         title.appendChild(editBtn);
         let descPara = document.createElement('P');
         titleCont.appendChild(descPara);
         descPara.setAttribute('id','listDesc');
-        descPara.setAttribute('data-page', pageNum);
-        descPara.innerHTML = listData.listsArray[pageNum].desc;
-        let desceditBtn = document.createElement('button');
-        desceditBtn.setAttribute('id','descEditBtn');
-        desceditBtn.setAttribute('data-btn','descEditBtn');
-        desceditBtn.setAttribute('data-text', listData.selectedToDo[pageNum].text);
-        desceditBtn.setAttribute('data-page', listData.selectedToDo[pageNum].page);
-        desceditBtn.innerHTML = 'Edit';
-        descPara.appendChild(desceditBtn);
+        let listDesc = listData.listsArray[listIndex].desc
+        if (listDesc === '') {
+            descPara.innerHTML = 'Description';
+        } else {
+            descPara.innerHTML = listDesc;
+        }
+        let descEditBtn = document.createElement('button');
+        descEditBtn.setAttribute('id','descEditBtn');
+        descEditBtn.setAttribute('data-btn','descEditBtn');
+        descEditBtn.setAttribute('data-listid', listId);
+        descEditBtn.innerHTML = 'Edit';
+        descPara.appendChild(descEditBtn);
+        let descErrCont = document.createElement('div');
+        descErrCont.setAttribute('id', 'descErrCont');
+        descPara.appendChild(descErrCont);
+        let titleErrCont = document.createElement('div');
+        titleErrCont.setAttribute('id', 'titleErrCont');
+        title.appendChild(titleErrCont);
     },
     titleDelete: (pageNum) => {
         let deleteBtn = document.createElement('button');
@@ -44,7 +51,7 @@ const titlePage = {
         deleteBtn.innerHTML = 'Delete';
         titleCont.prepend(deleteBtn);
     },
-    editListTitleInputPrint: (page) => {
+    editListTitleInputPrint: (listIndex,listId) => {
         let titleCont = document.querySelector('#titleCont');
         let toDoCont = document.querySelector('#toDoCont');
         newListPrintCont.removeAllChildNodes(toDoCont);
@@ -55,32 +62,38 @@ const titlePage = {
         let titleInput = document.createElement('INPUT');
         titleInput.setAttribute('id','editTitleInput');
         titleInput.setAttribute('type','text');
-        titleInput.setAttribute('value', listData.listsArray[page].title);
+        titleInput.setAttribute('value', listData.listsArray[listIndex].title);
         titleHeader.appendChild(titleInput);
         let titleSaveBtn = document.createElement('button');
         titleSaveBtn.setAttribute('id','titleSaveBtn');
         titleSaveBtn.setAttribute('data-btn','titleSave');
-        titleSaveBtn.setAttribute('data-page',page);
+        titleSaveBtn.setAttribute('data-listid', listId);
         titleSaveBtn.innerHTML = 'save'
         titleHeader.appendChild(titleSaveBtn);
         let descPara = document.createElement('P');
         titleCont.appendChild(descPara);
         descPara.setAttribute('id','listDesc');
-        descPara.setAttribute('data-page', page);
-        descPara.innerHTML = listData.listsArray[page].desc;
+        let listDesc = listData.listsArray[listIndex].desc
+        if (listDesc === '') {
+            descPara.innerHTML = 'Description';
+        } else {
+            descPara.innerHTML = listDesc;
+        }
         let descEditBtn = document.createElement('button');
         descEditBtn.setAttribute('id','descEditBtn');
         descEditBtn.setAttribute('data-btn','descEditBtn');
-        descEditBtn.setAttribute('data-text', listData.selectedToDo[page].text);
-        descEditBtn.setAttribute('data-page', listData.selectedToDo[page].page);
+        descEditBtn.setAttribute('data-listid', listId);
         descEditBtn.innerHTML = 'Edit';
         descPara.appendChild(descEditBtn);
+        let descErrCont = document.createElement('div');
+        descErrCont.setAttribute('id', 'descErrCont');
+        descPara.appendChild(descErrCont);
         let titleErrCont = document.createElement('div');
         titleErrCont.setAttribute('id', 'titleErrCont');
         titleHeader.appendChild(titleErrCont);
         btnEvents();
     },
-    editListDescInputPrint: (page) => {
+    editListDescInputPrint: (listIndex, listId) => {
         let titleCont = document.querySelector('#titleCont');
         let toDoCont = document.querySelector('#toDoCont');
         newListPrintCont.removeAllChildNodes(toDoCont);
@@ -89,13 +102,11 @@ const titlePage = {
         let title = document.createElement('H3');
         titleCont.prepend(title);
         title.setAttribute('id', 'listTitle');
-        title.setAttribute('data-page',page)
-        title.innerHTML = listData.listsArray[page].title;
+        title.innerHTML = listData.listsArray[listIndex].title;
         let titleEditBtn = document.createElement('button');
         titleEditBtn.setAttribute('id','titleEditBtn');
         titleEditBtn.setAttribute('data-btn','titleEditBtn');
-        titleEditBtn.setAttribute('data-text', listData.selectedToDo[page].text);
-        titleEditBtn.setAttribute('data-page', listData.selectedToDo[page].page);
+        titleEditBtn.setAttribute('data-listid', listId);
         titleEditBtn.innerHTML = 'Edit';
         title.appendChild(titleEditBtn);
         let descPara = document.createElement('P');
@@ -103,14 +114,25 @@ const titlePage = {
         let descInput = document.createElement('INPUT');
         descInput.setAttribute('id', 'editDescInput');
         descInput.setAttribute('type', 'text');
-        descInput.setAttribute('value', listData.listsArray[page].desc);
+        let listDesc = listData.listsArray[listIndex].desc;
+        if (listDesc === '') {
+            descInput.setAttribute('placeholder', 'Description');
+        } else {
+            descInput.setAttribute('value', listData.listsArray[listIndex].desc);
+        }
         descPara.appendChild(descInput);
         let descSaveBtn = document.createElement('button');
         descSaveBtn.setAttribute('id','descEditBtn');
         descSaveBtn.setAttribute('data-btn', 'descSave');
-        descSaveBtn.setAttribute('data-page', page);
+        descSaveBtn.setAttribute('data-listid', listId);
         descSaveBtn.innerHTML = 'save';
         descPara.appendChild(descSaveBtn);
+        let descErrCont = document.createElement('div');
+        descErrCont.setAttribute('id', 'descErrCont');
+        descPara.appendChild(descErrCont);
+        let titleErrCont = document.createElement('div');
+        titleErrCont.setAttribute('id', 'titleErrCont');
+        title.appendChild(titleErrCont);
         btnEvents();
     }
 };

@@ -1,6 +1,8 @@
 import { newListPrintCont } from "./newListPrint";
+import { listData } from "./newProjectData";
 
-const newProjectInput = (placeholder) => {
+const newListInput = () => {
+    listData.selectedToDo = [];
     const div = document.querySelector('#content');
     newListPrintCont.removeAllChildNodes(div);
 
@@ -11,7 +13,7 @@ const newProjectInput = (placeholder) => {
     titleCont.appendChild(titleInput);
     titleInput.setAttribute('id', 'listTitleInput')
     titleInput.setAttribute('type', 'text');
-    titleInput.setAttribute('placeholder', placeholder);
+    titleInput.setAttribute('placeholder', 'List Title');
     let descCont = document.createElement('P');
     div.appendChild(descCont);
     let descInput = document.createElement('INPUT');
@@ -22,8 +24,10 @@ const newProjectInput = (placeholder) => {
     let submitBtn = document.createElement('button');
     submitBtn.innerHTML = 'submit';
     submitBtn.setAttribute('data-btn', 'submit');
-    // submitBtn.setAttribute('data-page', pageNum);
     descCont.appendChild(submitBtn);
+    let newListErrCont = document.createElement('div');
+    newListErrCont.setAttribute('id', 'newListErrCont');
+    div.appendChild(newListErrCont);
 }
 
-export { newProjectInput };
+export { newListInput };

@@ -1,4 +1,4 @@
-import { newProjectInput } from './newListInput';
+import { newListInput } from './newListInput';
 import { listData } from './newProjectData';
 import { listPagePrint } from './listPagePrint';
 import { newListPrintCont } from './newListPrint';
@@ -9,58 +9,73 @@ import { editToDoInput } from './editToDoInput';
 const btnFilter = (event) => {
     let btnData = event.target.getAttribute('data-btn');
     let btnPage = event.target.getAttribute('data-page');
+    let listId = parseInt(event.target.getAttribute('data-listid'));
+    let listIndex = listData.findListId(listId, listData.listsArray);
     console.log(btnData);
+    console.log(listIndex,listId);
     switch (true) {
         case btnData === 'newList':
-            newProjectInput('List Title');
+            newListInput();
             btnEvents();
             break;
         case btnData === 'submit':
             listData.newListData();
-            newListPrintCont.newListPrint(btnPage);
+            newListPrintCont.newListPrint();
             btnEvents();
             break;
         case btnData === 'saveToDo':
-            listData.newToDoData(btnPage);
+            listData.newToDoData(listIndex,listId);
+            newListPrintCont.newListPrint();
             btnEvents();
             break;
         case btnData === 'titleSave':
-            listData.listEditData(btnPage)
-            newListPrintCont.editListPrint();
+            listData.listEditData(listIndex,listId)
+            newListPrintCont.newListPrint();
             break;
         case btnData === 'descSave':
-            listData.listEditDescData(btnPage);
-            btnEvents();
+            listData.listEditDescData(listIndex,listId);
+            newListPrintCont.newListPrint();
             break;        
         case btnData === 'saveEditToDo':
-            listData.editToDoData(btnPage);
+            listData.editToDoData(listIndex, listId);
+            newListPrintCont.newListPrint();
             btnEvents();
             break;    
         case btnData === 'newToDo':
-            newToDoInput(btnPage);
+            newToDoInput(listIndex,listId);
+            newListPrintCont.newListPrint();
             btnEvents();
             break;
-        case btnData > -1:
-            listData.newToDoPrint(btnData);
-            listPagePrint(btnData);
+        case btnData === 'listPrintBtn':
+            listData.newToDoPrint(listIndex,listId);
+            listPagePrint(listIndex,listId);
+            console.table(listData.selectedToDo);
             btnEvents();
             break;
         case btnData === 'titleEditBtn':
-            titlePage.editListTitleInputPrint(btnPage);
+            titlePage.editListTitleInputPrint(listIndex,listId);
             btnEvents();
             break;
         case btnData === 'descEditBtn':
-            titlePage.editListDescInputPrint(btnPage);
+            titlePage.editListDescInputPrint(listIndex,listId);
             btnEvents();
             break;
-
         case btnData === 'listDelete':
-            listData.listDelete(btnPage);
-            newListPrintCont.deleteListPrint();
+            listData.listDelete(listIndex,listId);
+            newListPrintCont.newListPrint();
+            console.table(listData.toDoArray);    
+            break;
+        case btnData === 'toDoDeleteBtn':
+            let toDoId = parseInt(event.target.getAttribute('data-id'));
+            listData.toDoDelete(listIndex,listId,toDoId);
+            newListPrintCont.newListPrint();
+            console.log(toDoId);
+            console.table(listData.listsArray);
+            console.table(listData.toDoArray);
             break;
         case btnData ==='toDoEdit':
-            let index = event.target.getAttribute('data-index');
-            editToDoInput(index,btnPage);
+            let selectedIndex = event.target.getAttribute('data-index');
+            editToDoInput(listIndex,listId,selectedIndex);
             btnEvents();
             break;
     }
@@ -73,31 +88,31 @@ const btnEvents = () => {
         }
 }
 
-newListPrintCont.deleteListPrint();
+newListPrintCont.newListPrint();
 btnEvents();
-let dummy0 = listData.toDoFactory('0','do this','2021-12-17','',false);
+let dummy0 = listData.toDoFactory(999,'do this','2021-12-17',20211217,'','pending',false);
 listData.toDoArray.push(dummy0);
-let dummy1 = listData.toDoFactory('0','do that thing','2021-12-18','',false);
+let dummy1 = listData.toDoFactory(999,'do that thing','2021-12-18',20211218,'','pending',false);
 listData.toDoArray.push(dummy1);
-let dummy2 = listData.toDoFactory('0','find that','2021-12-17','',false);
+let dummy2 = listData.toDoFactory(999,'find that','2021-12-19',20211219,'','pending',false);
 listData.toDoArray.push(dummy2);
-let dummy3 = listData.toDoFactory('1','buy that thing','2021-12-17','',false);
+let dummy3 = listData.toDoFactory(998,'buy that thing','2021-12-19',20211219,'','pending',false);
 listData.toDoArray.push(dummy3);
-let dummy4 = listData.toDoFactory('1','go to this place','2021-12-17','',false);
+let dummy4 = listData.toDoFactory(998,'go to this place','2021-12-17',20211219,'','pending',false);
 listData.toDoArray.push(dummy4);
-let dummy5 = listData.toDoFactory('1','fill out these forms','2021-12-17','',false);
+let dummy5 = listData.toDoFactory(998,'fill out these forms','2021-12-17',20211219,'','pending',false);
 listData.toDoArray.push(dummy5);
-let dummy6 = listData.toDoFactory('1','go to this meeting','2021-12-17','',false);
+let dummy6 = listData.toDoFactory(998,'go to this meeting','2021-12-17',20211219,'','pending',false);
 listData.toDoArray.push(dummy6);
-let dummy7 = listData.toDoFactory('2','buy things for that thing','2021-12-17','',false);
+let dummy7 = listData.toDoFactory(997,'buy things for that thing','2021-12-17',20211219,'','pending',false);
 listData.toDoArray.push(dummy7);
-let dummy8 = listData.toDoFactory('2','mail those packages','2021-12-17','',false);
+let dummy8 = listData.toDoFactory(997,'mail those packages','2021-12-17',20211219,'','pending',false);
 listData.toDoArray.push(dummy8);
-let dummy9 = listData.toDoFactory('2','research that thing','2021-12-17','',false);
+let dummy9 = listData.toDoFactory(997,'research that thing','2021-12-17',20211219,'','pending',false);
 listData.toDoArray.push(dummy9);
-let dummy11 = listData.toDoFactory('2','find another place','2021-12-17','',false);
+let dummy11 = listData.toDoFactory(998,'find another place','2021-12-17',20211219,'','pending',false);
 listData.toDoArray.push(dummy11);
-let dummy12 = listData.toDoFactory('0','find an alternative to this','2021-12-17','',false);
+let dummy12 = listData.toDoFactory(997,'find an alternative to this','2021-12-17',20211219,'','pending',false);
 listData.toDoArray.push(dummy12);
 
 console.log(new Date().toISOString().slice(0,10).split('-').join(''));

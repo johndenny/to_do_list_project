@@ -1,11 +1,11 @@
 import { listPagePrint } from "./listPagePrint";
 import { newListPrintCont } from "./newListPrint";
 
-const newToDoInput = (page,) => {
+const newToDoInput = (listIndex,listId) => {
     if (document.querySelector('#toDoInput') !== null) {
-        return listPagePrint(page);
+        return listPagePrint(listIndex,listId);
     }
-    listPagePrint(page);
+    listPagePrint(listIndex,listId);
 
     const toDoCont = document.querySelector('#toDoCont');
     let toDoInputCont = document.createElement('P');
@@ -41,7 +41,7 @@ const newToDoInput = (page,) => {
     let saveBtn = document.createElement('button');
     saveBtn.innerHTML = 'save';
     saveBtn.setAttribute('data-btn', 'saveToDo');
-    saveBtn.setAttribute('data-page', page);
+    saveBtn.setAttribute('data-listid', listId);
     toDoInputCont.appendChild(saveBtn);
 }
 
