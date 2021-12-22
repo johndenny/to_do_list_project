@@ -6,33 +6,64 @@ import { titlePage } from './titlePagePrint';
 
 const listData = {
     listsArray: [
-        {listId: 999, dateValue: '', title: 'My Vaction', desc: "I'm going to New York City!"}, 
-        {listId: 998, dateValue: '', title: 'My Work Project', desc: 'my project to make money.'}, 
-        {listId: 997, dateValue: '', title: 'My New Hobby', desc: 'my new hobby is so cool!'}
+        {listId: 999, dateValue: '', title: 'My Vaction', desc: "I'm going to New York City!", percentComplete: 0}, 
+        {listId: 998, dateValue: '', title: 'My Work Project', desc: 'my project to make money.', percentComplete: 0}, 
+        {listId: 997, dateValue: '', title: 'My New Hobby', desc: 'my new hobby is so cool!', percentComplete: 0}
     ],
     toDoArray: [],
     selectedToDo: [],
-    historyToDo: [],
+    dueTodayArray: [],
+    dueTomArray: [],
+    dueTwoArray: [],
+    dueSevenArray: [],
+    overDueArray:[],
+    toDoDueDateSort: () => {
+        let dueToday = listData.toDoArray.filter(function(arr){
+            return arr.daysTilDue === 0;
+        });
+        listData.dueTodayArray = dueToday;
+        let dueTom = listData.toDoArray.filter(function(arr) {
+            return arr.daysTilDue === 1;
+        });
+        listData.dueTomArray = dueTom;
+        let dueTwoDays = listData.toDoArray.filter(function(arr) {
+            return arr.daysTilDue === 2;
+        });
+        listData.dueTwoArray = dueTwoDays;
+        let dueSevenDays = listData.toDoArray.filter(function(arr) {
+            return arr.daysTilDue > 2 && arr.daysTilDue < 7;
+        });
+        listData.dueSevenArray = dueSevenDays;
+        listData.dateValueSort(listData.dueSevenArray);
+        let overDue = listData.toDoArray.filter(function(arr){
+            return arr.daysTilDue < 0;
+        });
+        listData.overDueArray = overDue;
+        listData.dateValueSort(listData.overDueArray);
+    },
     dateValueSort: (arr) => {
         arr.sort(function(a,b){
             return a.dateValue - b.dateValue;
         });
     },
-    completeToDoSort: () => {
-        let result = listData.selectedToDo.filter(function(arr){
+    completeToDoSort: (listIndex,listId) => {
+        let listIdResult = listData.toDoArray.filter(function(arr){
+            return arr.listId == listId;
+        });
+        let completeInList = listIdResult.filter(function(arr){
             return arr.status == 'complete';
         });
-        let resultLength = result.length;
-        console.log(resultLength,listData.selectedToDo.length);
-        let percentComplete = resultLength/listData.selectedToDo.length;
-        console.log(percentComplete); 
+        console.log(listIdResult.length,completeInList.length);
+        let percentComplete = (completeInList.length/listIdResult.length)*100;
+        listData.listsArray[listIndex].percentComplete = percentComplete;
+        console.table(listData.listsArray);
     },
     newListData: () => {
         let newListTitle = document.querySelector('#listTitleInput').value;
         let newListDesc = document.querySelector('#listDescInput').value;
         let listLetterCount = newListTitle.split(' ').join('');
         if (listLetterCount.length >= 3) {
-            let list = listData.listFactory('',newListTitle,newListDesc);
+            let list = listData.listFactory('',newListTitle,newListDesc,0);
             listData.listsArray.push(list);
             console.table(listData.listsArray);
             let listIndex = listData.listsArray.length-1;
@@ -82,23 +113,18 @@ const listData = {
         newListPrintCont.removeAllChildNodes(content);
         console.table(listData.toDoArray);
     },
-    toDoDelete: (listIndex,listId,toDoId) => {
+    toDoDelete: (toDoId) => {
         for (let i = listData.toDoArray.length-1; i >=0; i--) {
             if (listData.toDoArray[i].id === toDoId) {
                 listData.toDoArray.splice(i,1);
-            
             }      
         }    
-        listData.newToDoPrint(listIndex,listId);
-        listPagePrint(listIndex,listId);
         console.table(listData.toDoArray);  
     },
     newToDoData: (listIndex,listId) => {
         let newToDo = document.querySelector('#toDoInput').value;
         let toDoLetterCount = newToDo.split(' ').join('');
         let toDoDate = document.querySelector('#toDoDate').value;
-        let dateAdd = toDoDate.split('-').join('');
-        let dateValue = parseInt(dateAdd);
         let todayValue = new Date().toISOString().slice(0,10).split('-').join('');
         let daysUntilDue = dateValue - parseInt(todayValue);
         let toDoPriority = document.querySelector('#toDoPriority').checked;
@@ -115,7 +141,7 @@ const listData = {
             errSpan.innerHTML = 'To Do is too short.'
             cont.appendChild(errSpan);
         } else {
-            let toDo = listData.toDoFactory(listId,newToDo,toDoDate,dateValue,daysUntilDue,'pending',toDoPriority);
+            let toDo = listData.toDoFactory(listId,newToDo,toDoDate,daysUntilDue,'pending',toDoPriority);
             listData.toDoArray.push(toDo);
             listData.newToDoPrint(listIndex,listId);
             let newIndex = listData.findListId(listId, listData.listsArray);
@@ -154,18 +180,8 @@ const listData = {
             } else {
                 listData.toDoArray[idResult].priority = false;
             }
-            
-            listData.newToDoPrint(listIndex,listId);
-            let newIndex = listData.findListId(listId, listData.listsArray);
-            listPagePrint(newIndex, listId);
             console.table(listData.toDoArray);
         }
-    },
-    findToDo: (text,page) => {
-        let result = listData.toDoArray.findIndex(function(arr){
-            return arr.text == text && arr.page == page;
-        });
-        return result;
     },
     findId: (num,arr) => {
         let idIndex = arr.findIndex(function(arr){
@@ -192,19 +208,21 @@ const listData = {
             let closestDate = listData.selectedToDo[0].dateValue;
             listData.listsArray[listIndex].dateValue = closestDate;
             listData.dateValueSort(listData.listsArray);
-            console.table(listData.listsArray);
         }
         
     },
-    listFactory: (dateValue,title,desc) => {
+    listFactory: (dateValue,title,desc,percentComplete) => {
         let listId = Math.floor(Math.random()*999);
         let copyCheck = listData.findListId(listId,listData.listsArray);
         while (copyCheck !== -1) {
             return id = Math.floor(Math.random()*999);
         }
-        return {listId,dateValue,title,desc};
+        return {listId,dateValue,title,desc,percentComplete};
     },
-    toDoFactory: (listId,text,date,dateValue,daysTilDue,status,priority) => {
+    toDoFactory: (listId,text,date,status,priority) => {
+        let dateValue = parseInt(date.split('-').join(''));
+        let todayValue = new Date().toISOString().slice(0,10).split('-').join('');
+        let daysTilDue = dateValue - parseInt(todayValue);
         let id = Math.floor(Math.random()*999);
         let copyCheck = listData.findId(id,listData.toDoArray);
         while (copyCheck !== -1) {
