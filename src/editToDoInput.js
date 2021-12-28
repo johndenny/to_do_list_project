@@ -1,3 +1,4 @@
+import format from 'date-fns/format';
 import { checkBoxValid } from './checkBoxEvent';
 import { listPagePrint } from './listPagePrint';
 import { newListPrintCont } from './newListPrint';
@@ -35,7 +36,9 @@ const editToDoInput = (listIndex,listId,selectedIndex) => {
             let date = document.createElement('INPUT');
             date.setAttribute('id', 'toDoDate');
             date.setAttribute('type', 'date');
-            date.setAttribute('value', listData.selectedToDo[selectedIndex].date);
+            let dateFormat = format(new Date(listData.selectedToDo[selectedIndex].date), 'yyyy-MM-dd');
+            console.log(dateFormat);
+            date.setAttribute('value', dateFormat);
             toDoInputCont.appendChild(date);
 
             //Priority
@@ -75,6 +78,26 @@ const editToDoInput = (listIndex,listId,selectedIndex) => {
                 toDo.checked = true;
             } else {
                 toDo.checked = false;
+            }
+            let dueDateWarningCont = document.createElement('span');
+            dueDateWarningCont.setAttribute('id','dueDateWarningCont');
+            text.appendChild(dueDateWarningCont);
+            switch (true) {
+                case listData.selectedToDo[i].daysTilDue < 0:
+                    dueDateWarningCont.innerText = '__Over Due!__';
+                    break;
+                case listData.selectedToDo[i].daysTilDue === 0:
+                    dueDateWarningCont.innerText = '__Due Today__';
+                    break;
+                case listData.selectedToDo[i].daysTilDue === 1:
+                    dueDateWarningCont.innerText = '__Due Tomorrow__';
+                    break;
+                case listData.selectedToDo[i].daysTilDue === 2:
+                    dueDateWarningCont.innerText = '__Due in Two Days__';
+                    break;
+                case (listData.selectedToDo[i].daysTilDue > 2 && listData.selectedToDo[i].daysTilDue < 7):
+                    dueDateWarningCont.innerText = '__Due This Week__';
+                    break;
             }
             let editBtn = document.createElement('button');
             editBtn.setAttribute('id','titleEditBtn');
