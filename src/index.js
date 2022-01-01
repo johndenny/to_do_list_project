@@ -4,7 +4,7 @@ import { listPagePrint } from './listPagePrint';
 import { newListPrintCont } from './newListPrint';
 import { newToDoInput, toDoCheckListPrint, editToDoInput } from './newToDoInput';
 import { titlePage } from './titlePagePrint';
-import { inboxEditPagePrint, inboxNewToDoInput, inboxPagePrint } from './inboxPagePrint';
+import { inboxEditPagePrint, inboxNewToDoInput, inboxDetailPrint, listDetailPrint, dropDownMenu, listDropDownMenu, titleWithToDoPagePrint } from './inboxPagePrint';
 import { upcomingPagePrint } from './upcomingPagePrint';
 import './style.css';
 
@@ -40,36 +40,73 @@ content.setAttribute('id', 'content');
 bodyCont.appendChild(content);
 
 //Static Buttons
+let inboxBtnCont = document.createElement('div');
+inboxBtnCont.id = 'inboxBtnCont';
+staticBtnCont.appendChild(inboxBtnCont);
 let inboxBtn = document.createElement('span');
 inboxBtn.setAttribute('class','button');
 inboxBtn.setAttribute('id','inboxBtn');
 inboxBtn.setAttribute('data-btn','inbox');
 inboxBtn.innerText = 'Inbox';
-staticBtnCont.appendChild(inboxBtn);
+inboxBtnCont.appendChild(inboxBtn);
+let inboxOverdue = document.createElement('span');
+inboxOverdue.id = 'inboxOverdue';
+inboxBtnCont.appendChild(inboxOverdue);
+let inboxDueToday = document.createElement('span');
+inboxDueToday.id = 'inboxDueToday';
+inboxBtnCont.appendChild(inboxDueToday);
+let thisWeekCont = document.createElement('div');
+thisWeekCont.id = 'thisWeekCont';
+staticBtnCont.appendChild(thisWeekCont);
+let thisWeekBtn = document.createElement('span');
+thisWeekBtn.id = 'thisWeekBtn';
+thisWeekBtn.className = 'button';
+thisWeekBtn.dataset.btn = 'thisWeek';
+thisWeekBtn.innerText = 'This Week';
+thisWeekCont.appendChild(thisWeekBtn);
+let thisWeekNum = document.createElement('span');
+thisWeekNum.id = 'thisWeekNum';
+thisWeekCont.appendChild(thisWeekNum);
 let historyBtn = document.createElement('span');
 historyBtn.setAttribute('class','button');
 historyBtn.setAttribute('id','historyBtn');
 historyBtn.setAttribute('data-btn','hisory');
 historyBtn.innerText = 'History';
 staticBtnCont.appendChild(historyBtn);
+let listBtnCont = document.createElement('div');
+listBtnCont.setAttribute('id','listBtnCont');
+btnCont.appendChild(listBtnCont)
+let listBtnSymbol = document.createElement('span');
+listBtnSymbol.setAttribute('id','listBtnSymbol');
+listBtnSymbol.innerHTML = '&#9013;';
+listBtnCont.appendChild(listBtnSymbol);
 let listBtn = document.createElement('span');
-listBtn.setAttribute('id','listBtn');
+listBtn.setAttribute('id','listContBtn');
 listBtn.setAttribute('data-btn','list');
 listBtn.innerText = 'Lists';
-btnCont.appendChild(listBtn);
+listBtnCont.appendChild(listBtn);
 
 //Loops of Lists Container
 let listCont = document.createElement('div');
 listCont.setAttribute('id','listBtns');
 btnCont.appendChild(listCont);
 
+//New List Button Container
+let newListBtnCont = document.createElement('div');
+newListBtnCont.setAttribute('id','newListBtnCont');
+btnCont.appendChild(newListBtnCont);
+
 //New List Button
+let newListBtnSymbol = document.createElement('span');
+newListBtnSymbol.setAttribute('id','newListSymbol');
+newListBtnSymbol.innerHTML = '+';
+newListBtnCont.appendChild(newListBtnSymbol);
 let newListBtn = document.createElement('span');
 newListBtn.setAttribute('class','button')
 newListBtn.setAttribute('id','newListBtn');
 newListBtn.setAttribute('data-btn','newList');
-newListBtn.innerText = '+ New List';
-btnCont.appendChild(newListBtn);
+newListBtn.innerText = 'New List';
+newListBtnCont.appendChild(newListBtn);
 
 const myModalDisplayNone = () => {
     const myModal = document.querySelector('#myModal');
@@ -80,16 +117,37 @@ const btnFilter = (event) => {
     let btnData = event.target.getAttribute('data-btn');
     let btnPage = event.target.getAttribute('data-page');
     let toDoId = parseInt(event.target.getAttribute('data-id'));
-    let toDoIndex = listData.findId(toDoId,listData.toDoArray);
+    let toDoIndex = listData.findId(toDoId,listData.selectedToDo);
     let listId = parseInt(event.target.getAttribute('data-listid'));
+    let staticId = event.target.dataset.listid;
     let listIndex = listData.findListId(listId, listData.listsArray);
     let inboxTitle = document.querySelector('#inboxTitle');
     console.log(btnData);
+    console.log(staticId);
     console.log(listIndex,listId,toDoIndex,toDoId);
     switch (true) {
+        case btnData === 'dropDownMenu':
+            dropDownMenu(toDoId, listData.selectedToDo);
+            break;
+        case btnData === 'listDropDownMenu':
+            listDropDownMenu();
+            break;
+        case btnData === 'toDoDetails':
+            if (inboxTitle !== null) {
+                inboxDetailPrint(toDoIndex);  
+            } else {
+                listDetailPrint(toDoId);
+            }
+            btnEvents();
+            break;
         case btnData === 'inbox':
-            listData.dateSort(listData.toDoArray);
-            inboxPagePrint();
+            listData.inboxToDoSort();
+            titleWithToDoPagePrint('Inbox','inbox');
+            btnEvents();
+            break;
+        case btnData === 'thisWeek':
+            listData.thisWeekSort();
+            titleWithToDoPagePrint('This Week','week');
             btnEvents();
             break;
         case btnData === 'upcoming':
@@ -118,15 +176,20 @@ const btnFilter = (event) => {
             btnEvents();
             break;
         case btnData === 'saveToDo':
-            if (listIndex === -1) {
-                listData.newToDoData(toDoIndex);
-                myModalDisplayNone();
-                listData.dateSort(listData.toDoArray);
-                inboxPagePrint();
+            
+            listData.newToDoData();
+            newListPrintCont.newListPrint();
+            myModalDisplayNone();
+            listData.dateSort(listData.selectedToDo);
+            if (staticId === 'inbox') {
+                listData.inboxToDoSort();
+                titleWithToDoPagePrint('Inbox','inbox');
+            } else if (staticId === 'week') {
+                listData.thisWeekSort();
+                titleWithToDoPagePrint('This Week','week');
             } else {            
-                listData.newToDoData(toDoIndex);
-                newListPrintCont.newListPrint();
-                myModalDisplayNone();
+                listData.newToDoPrint(listIndex,listId);
+                listPagePrint(listIndex,listId);
             }
             btnEvents();
             break;
@@ -142,10 +205,11 @@ const btnFilter = (event) => {
             newListPrintCont.newListPrint();
             break;        
         case btnData === 'saveEditToDo':
-            listData.editToDoData(toDoIndex);
+            listData.editToDoData(toDoId);
             myModalDisplayNone();
             newListPrintCont.newListPrint();
             if (inboxTitle !== null) {
+                listData.inboxToDoSort();
                 inboxPagePrint();
             }
             btnEvents();
@@ -158,7 +222,7 @@ const btnFilter = (event) => {
             btnEvents();
             break;    
         case btnData === 'newToDo':
-            newToDoInput(listIndex,listId);
+            newToDoInput(listIndex,staticId);
             newListPrintCont.newListPrint();
             btnEvents();
             break;
@@ -201,7 +265,7 @@ const btnFilter = (event) => {
             btnEvents();
             break;
         case btnData ==='toDoEdit':
-            editToDoInput(toDoId,toDoIndex,listId);
+            editToDoInput(toDoId,toDoIndex,listId,listIndex);
             newListPrintCont.newListPrint();
             btnEvents();
             break;
@@ -228,41 +292,42 @@ const btnEvents = () => {
         }
 }
 
-let dummyList0 = listData.listFactory('','Toronto Trip',"Tasks for traveling to Toronto on May 12th 2022",'');
+let dummyList0 = listData.listFactory('#00ad54','Errands',"Shopping lists.",'');
 listData.listsArray.push(dummyList0);
-let dummyList1 = listData.listFactory('','Work','Tasks for Work','');
+let dummyList1 = listData.listFactory('#2b00ff','Work','Tasks for work.','');
 listData.listsArray.push(dummyList1);
-let dummyList3 = listData.listFactory('','Fish Tanks','Tasks for Fish Tanks','');
+let dummyList3 = listData.listFactory('#ffbb00','Home','Tasks around the house.','');
 listData.listsArray.push(dummyList3);
 
-let dummy0 = listData.toDoFactory(listData.listsArray[0].listId,listData.listsArray[0].title,'do this','',[],'2021-12-21',false);
+let dummy0 = listData.toDoFactory(listData.listsArray[0].listId,'Do this','',[],'2021-12-21',false);
 listData.toDoArray.push(dummy0);
-let dummy1 = listData.toDoFactory(listData.listsArray[0].listId,listData.listsArray[0].title,'do that thing','',[],'2021-12-22',false);
+let dummy1 = listData.toDoFactory(listData.listsArray[0].listId,'Do that thing','',[],'2021-12-22',false);
 listData.toDoArray.push(dummy1);
-let dummy2 = listData.toDoFactory(listData.listsArray[0].listId,listData.listsArray[0].title,'find that','',[],'2021-12-23',false);
+let dummy2 = listData.toDoFactory(listData.listsArray[0].listId,'Find that','',[],'2021-12-23',false);
 listData.toDoArray.push(dummy2);
-let dummy3 = listData.toDoFactory(listData.listsArray[0].listId,listData.listsArray[0].title,'buy that thing','',[],'2021-12-24',false);
+let dummy3 = listData.toDoFactory(listData.listsArray[0].listId,'Buy that thing','',[],'2021-12-24',false);
 listData.toDoArray.push(dummy3);
-let dummy4 = listData.toDoFactory(listData.listsArray[1].listId,listData.listsArray[1].title,'go to this place','',[],'2021-12-25',false);
+let dummy4 = listData.toDoFactory(listData.listsArray[1].listId,'Go to this place','',[],'2021-12-25',false);
 listData.toDoArray.push(dummy4);
-let dummy5 = listData.toDoFactory(listData.listsArray[1].listId,listData.listsArray[1].title,'fill out these forms','',[],'2021-12-26',false);
+let dummy5 = listData.toDoFactory(listData.listsArray[1].listId,'Fill out these forms','',[],'2021-12-26',false);
 listData.toDoArray.push(dummy5);
-let dummy6 = listData.toDoFactory(listData.listsArray[1].listId,listData.listsArray[1].title,'go to this meeting','',[],'2021-12-27',false);
+let dummy6 = listData.toDoFactory(listData.listsArray[1].listId,'Go to this meeting','',[],'2021-12-27',false);
 listData.toDoArray.push(dummy6);
-let dummy7 = listData.toDoFactory(listData.listsArray[2].listId,listData.listsArray[2].title,'buy things for that thing','',[],'2021-12-28',false);
+let dummy7 = listData.toDoFactory(listData.listsArray[2].listId,'Buy things for that thing','',[],'2021-12-28',false);
 listData.toDoArray.push(dummy7);
-let dummy8 = listData.toDoFactory(listData.listsArray[2].listId,listData.listsArray[2].title,'mail those packages','',[],'2021-12-21',false);
+let dummy8 = listData.toDoFactory(listData.listsArray[2].listId,'Mail those packages','',[],'2021-12-21',false);
 listData.toDoArray.push(dummy8);
-let dummy9 = listData.toDoFactory(listData.listsArray[2].listId,listData.listsArray[2].title,'research that thing','',[],'2021-12-22',false);
+let dummy9 = listData.toDoFactory(listData.listsArray[2].listId,'Research that thing','',[],'2021-12-22',false);
 listData.toDoArray.push(dummy9);
-let dummy11 = listData.toDoFactory(listData.listsArray[2].listId,listData.listsArray[2].title,'find another place','',[],'2021-12-23',false);
+let dummy11 = listData.toDoFactory(listData.listsArray[2].listId,'Find another place','',[],'2021-12-23',false);
 listData.toDoArray.push(dummy11);
-let dummy12 = listData.toDoFactory(listData.listsArray[1].listId,listData.listsArray[1].title,'find an alternative to this','',[],'2021-12-25',false);
+let dummy12 = listData.toDoFactory(listData.listsArray[1].listId,'Find an alternative to this','',[],'2021-12-25',false);
 listData.toDoArray.push(dummy12);
 
 
 newListPrintCont.newListPrint();
-inboxPagePrint();
+listData.inboxToDoSort();
+titleWithToDoPagePrint('Inbox','inbox');
 btnEvents();
 
 console.log(new Date().toISOString().slice(0,10).split('-').join(''));

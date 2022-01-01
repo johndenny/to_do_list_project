@@ -13,18 +13,10 @@ const newToDoInput = (listIndex,listId) => {
 
     //Input Container
     const toDoCont = document.querySelector('#toDoCont');
-    let toDoInputCont = document.createElement('P');
+    let toDoInputCont = document.createElement('div');
     toDoInputCont.setAttribute('id','toDoInputCont');
     modalContent.appendChild(toDoInputCont);
-        
-    //Close Button
-    let modalClose = document.createElement('span');
-    modalClose.setAttribute('id','modalClose');
-    modalClose.setAttribute('class','button');
-    modalClose.setAttribute('data-btn','cancel');
-    modalClose.innerHTML = '&times;';
-    toDoInputCont.appendChild(modalClose);
-    
+
     //Header
     let listInputHeader = document.createElement('span');
     listInputHeader.setAttribute('id','toDoInputHeader');
@@ -35,6 +27,7 @@ const newToDoInput = (listIndex,listId) => {
     let toDoLabel = document.createElement('label');
     toDoLabel.setAttribute('id','newToDoLabel');
     toDoLabel.setAttribute('for','toDoInput');
+    toDoLabel.innerText = 'Title';
     toDoInputCont.appendChild(toDoLabel);
     let toDoInput = document.createElement('INPUT');
     toDoInput.setAttribute('id', 'toDoInput');
@@ -47,30 +40,46 @@ const newToDoInput = (listIndex,listId) => {
     toDoDateLabel.setAttribute('for','toDoDate');
     toDoDateLabel.innerText = 'Due Date';
     toDoInputCont.appendChild(toDoDateLabel);
+
+    //Date Container
+    let dateCont = document.createElement('div');
+    dateCont.id = 'dateInputCont';
+    toDoInputCont.appendChild(dateCont)
     let date = document.createElement('INPUT');
     date.setAttribute('id', 'toDoDate');
     date.setAttribute('type', 'date');
-    toDoInputCont.appendChild(date);
+    dateCont.appendChild(date);
+
+    //Priority Container 
+    let priorityInputCont = document.createElement('div');
+    priorityInputCont.setAttribute('id','priorityInputCont');
+    toDoInputCont.appendChild(priorityInputCont);
 
     //Priority
     let label = document.createElement('label');
     label.setAttribute('for','toDoPriority');
-    label.innerHTML = 'Priority?';
-    toDoInputCont.appendChild(label);
+    label.setAttribute('id','priorityInputLabel');
+    label.innerHTML = 'Priority';
+    priorityInputCont.appendChild(label);
     let priority =document.createElement('INPUT');
     priority.setAttribute('id', 'toDoPriority');
     priority.setAttribute('type', 'checkbox');
-    toDoInputCont.appendChild(priority);
+    priorityInputCont.appendChild(priority);
 
     //List
     let toDoListInputLabel = document.createElement('label');
     toDoListInputLabel.setAttribute('for','toDoListInput');
-    toDoListInputLabel.setAttribute('id','toDolistInputLabel');
+    toDoListInputLabel.setAttribute('id','toDoListInputLabel');
     toDoListInputLabel.innerText = 'List';
     toDoInputCont.appendChild(toDoListInputLabel);
+
+    //List Select Contianer 
+    let listSelectCont = document.createElement('div');
+    listSelectCont.id = 'listSelectCont';
+    toDoInputCont.appendChild(listSelectCont);
     let toDoListInput = document.createElement('select');
     toDoListInput.setAttribute('id','toDoListInput');
-    toDoInputCont.appendChild(toDoListInput);
+    listSelectCont.appendChild(toDoListInput);
     for (let i = 0; i<listData.listsArray.length; i++) {
         let option = document.createElement('option');
         option.setAttribute('value',listData.listsArray[i].listId);
@@ -88,44 +97,68 @@ const newToDoInput = (listIndex,listId) => {
     toDoNotesLabel.setAttribute('id','toDoNotesLabel');
     toDoNotesLabel.innerText = 'Notes'
     toDoInputCont.appendChild(toDoNotesLabel);
-    let toDoNotesInput = document.createElement('input');
+    let toDoNotesInput = document.createElement('textarea');
     toDoNotesInput.setAttribute('id','notesInput');
-    toDoNotesInput.setAttribute('type','text');
     toDoInputCont.appendChild(toDoNotesInput);
+
+    //Checklist Button Container
+    let checklistBtnCont = document.createElement('div');
+    checklistBtnCont.setAttribute('id','checklistBtnCont');
+    toDoInputCont.appendChild(checklistBtnCont);
     
     //Checklist Button
     let checkListBtn = document.createElement('button');
     checkListBtn.setAttribute('data-btn','checklist');
     checkListBtn.setAttribute('data-listid', listId);
-    checkListBtn.setAttribute('id','checkListBtn');
+    checkListBtn.setAttribute('id','checklistBtn');
     checkListBtn.innerText = 'Add Checklist';
-    toDoInputCont.appendChild(checkListBtn);
+    checklistBtnCont.appendChild(checkListBtn);
     
     //Checklist Container
     let checklistCont = document.createElement('div');
-    checklistCont.setAttribute('id','checklistCont');
+    checklistCont.setAttribute('id','checklistInputCont');
     toDoInputCont.appendChild(checklistCont);
 
+    //Button Container 
+    let newToDoInputBtnCont = document.createElement('div');
+    newToDoInputBtnCont.setAttribute('id','newToDoInputCont');
+    toDoInputCont.appendChild(newToDoInputBtnCont);
+    //Cancel Button
+    let cancelBtn = document.createElement('button');
+    cancelBtn.innerText = 'cancel';
+    cancelBtn.setAttribute('data-btn','cancel');
+    newToDoInputBtnCont.appendChild(cancelBtn);
     //Save Button
     let saveBtn = document.createElement('button');
     saveBtn.innerHTML = 'save';
     saveBtn.setAttribute('data-btn', 'saveToDo');
     saveBtn.setAttribute('data-listid', listId);
-    toDoInputCont.appendChild(saveBtn);
+    newToDoInputBtnCont.appendChild(saveBtn);
 }
 
 const toDoCheckListPrint = () => {
-    let checklistCont = document.querySelector('#checklistCont');
+    let checklistCont = document.querySelector('#checklistInputCont');
+    let checklistBtn = document.querySelector('#checklistBtn');
 
     if (checklistCont.hasChildNodes()) {
         checklistCont.removeChild(checklistCont.firstChild);
-        checklistCont.removeChild(checklistCont.firstChild); 
+        checklistCont.removeChild(checklistCont.firstChild);
+        checklistBtn.innerText = 'Add Checklist'; 
     } else {
-        
+        //Change Button Text
+        checklistBtn.innerText = 'Remove Checklist';
+
         //Checklist Input Container
         let checklistInputCont = document.createElement('div');
-        checklistInputCont.setAttribute('id','checklistInputCont');
+        checklistInputCont.setAttribute('id','checklistInputContCont');
         checklistCont.appendChild(checklistInputCont);
+        
+        //Checklist Label 
+        let checklistLabel = document.createElement('label');
+        checklistLabel.htmlFor = 'checklistInput';
+        checklistLabel.id = 'checklistInputLabel';
+        checklistLabel.innerText = 'Checklist';
+        checklistInputCont.appendChild(checklistLabel);
 
         //Checklist Item Input
         let checkListInput = document.createElement('input');
@@ -148,7 +181,7 @@ const toDoCheckListPrint = () => {
         //Subtract Button
         let subtractBtn = document.createElement('span');
         subtractBtn.setAttribute('id','subtractChecklistItem');
-        subtractBtn.innerText = '-';
+        subtractBtn.innerHTML = '&#8211';
         subtractBtn.onclick = subtractChecklist;
         addSubtractCont.appendChild(subtractBtn);
 
@@ -157,7 +190,7 @@ const toDoCheckListPrint = () => {
 }
 
 const extraChecklist = () => {
-    let checklistInputCont = document.querySelector('#checklistInputCont');
+    let checklistInputCont = document.querySelector('#checklistInputContCont');
     let newChecklistInput = document.createElement('input');
     newChecklistInput.setAttribute('id','checklistInput');
     newChecklistInput.setAttribute('type','text');
@@ -165,8 +198,8 @@ const extraChecklist = () => {
 }
 
 const subtractChecklist = () => {
-    let checklistInputCont = document.querySelector('#checklistInputCont');
-    if (checklistInputCont.childNodes.length === 1) {
+    let checklistInputCont = document.querySelector('#checklistInputContCont');
+    if (checklistInputCont.childNodes.length === 2) {
         return
     } else {
         checklistInputCont.removeChild(checklistInputCont.lastChild);
@@ -174,26 +207,36 @@ const subtractChecklist = () => {
 }
 
 const editToDoCheckListPrint = (toDoIndex) => {
-    let checklistCont = document.querySelector('#checklistCont');
+    let checklistCont = document.querySelector('#checklistInputCont');
+    let checklistBtn = document.querySelector('#checklistBtn')
 
     if (checklistCont.hasChildNodes()) {
         checklistCont.removeChild(checklistCont.firstChild);
         checklistCont.removeChild(checklistCont.firstChild); 
+        checklistBtn.innerText = 'Add Checklist';
     } else {
-            
+        checklistBtn.innerText = 'Remove Checklist';    
+
         //Checklist Input Container
         let checklistInputCont = document.createElement('div');
-        checklistInputCont.setAttribute('id','checklistInputCont');
+        checklistInputCont.setAttribute('id','checklistInputContCont');
         checklistCont.appendChild(checklistInputCont);
 
+        //Checklist Label 
+        let checklistLabel = document.createElement('label');
+        checklistLabel.htmlFor = 'checklistInput';
+        checklistLabel.id = 'checklistInputLabel';
+        checklistLabel.innerText = 'Checklist';
+        checklistInputCont.appendChild(checklistLabel);
+
         //Checklist Item Input
-        let allChecklistItems = listData.toDoArray[toDoIndex].checklist;
+        let allChecklistItems = listData.selectedToDo[toDoIndex].checklist;
         console.log(allChecklistItems);
         for (let i =0; i< allChecklistItems.length; i++) {
             let checkListInput = document.createElement('input');
             checkListInput.setAttribute('id','checklistInput');
             checkListInput.setAttribute('type','text');
-            checkListInput.setAttribute('value',listData.toDoArray[toDoIndex].checklist[i].text)
+            checkListInput.setAttribute('value',listData.selectedToDo[toDoIndex].checklist[i].text)
             checklistInputCont.appendChild(checkListInput);
         }
         
@@ -233,18 +276,10 @@ const editToDoInput = (toDoId,toDoIndex,listId) => {
 
     //Input Container
     const toDoCont = document.querySelector('#toDoCont');
-    let toDoInputCont = document.createElement('P');
+    let toDoInputCont = document.createElement('div');
     toDoInputCont.setAttribute('id','toDoInputCont');
     modalContent.appendChild(toDoInputCont);
-        
-    //Close Button
-    let modalClose = document.createElement('span');
-    modalClose.setAttribute('id','modalClose');
-    modalClose.setAttribute('class','button');
-    modalClose.setAttribute('data-btn','cancel');
-    modalClose.innerHTML = '&times;';
-    toDoInputCont.appendChild(modalClose);
-    
+
     //Header
     let listInputHeader = document.createElement('span');
     listInputHeader.setAttribute('id','toDoInputHeader');
@@ -255,11 +290,12 @@ const editToDoInput = (toDoId,toDoIndex,listId) => {
     let toDoLabel = document.createElement('label');
     toDoLabel.setAttribute('id','newToDoLabel');
     toDoLabel.setAttribute('for','toDoInput');
+    toDoLabel.innerText = 'Title'
     toDoInputCont.appendChild(toDoLabel);
     let toDoInput = document.createElement('INPUT');
     toDoInput.setAttribute('id', 'toDoInput');
     toDoInput.setAttribute('type', 'text');
-    toDoInput.setAttribute('value', listData.toDoArray[toDoIndex].text);
+    toDoInput.setAttribute('value', listData.selectedToDo[toDoIndex].text);
     toDoInputCont.appendChild(toDoInput);
 
     //Date
@@ -268,35 +304,52 @@ const editToDoInput = (toDoId,toDoIndex,listId) => {
     toDoDateLabel.setAttribute('for','toDoDate');
     toDoDateLabel.innerText = 'Due Date';
     toDoInputCont.appendChild(toDoDateLabel);
+
+    //Date Container
+    let dateCont = document.createElement('div');
+    dateCont.id = 'dateInputCont';
+    toDoInputCont.appendChild(dateCont)
     let date = document.createElement('INPUT');
     date.setAttribute('id', 'toDoDate');
     date.setAttribute('type', 'date');
-    let dateFormat = format(new Date(listData.toDoArray[toDoIndex].date), 'yyyy-MM-dd');
+    let dateFormat = format(new Date(listData.selectedToDo[toDoIndex].date), 'yyyy-MM-dd');
     date.setAttribute('value',dateFormat);
-    toDoInputCont.appendChild(date);
+    dateCont.appendChild(date);
+
+    //Priority Container 
+    let priorityInputCont = document.createElement('div');
+    priorityInputCont.setAttribute('id','priorityInputCont');
+    toDoInputCont.appendChild(priorityInputCont);
 
     //Priority
     let label = document.createElement('label');
     label.setAttribute('for','toDoPriority');
-    label.innerHTML = 'Priority?';
-    toDoInputCont.appendChild(label);
+    label.setAttribute('id','priorityInputLabel');
+    label.innerHTML = 'Priority';
+    priorityInputCont.appendChild(label);
     let priority =document.createElement('INPUT');
     priority.setAttribute('id', 'toDoPriority');
     priority.setAttribute('type', 'checkbox');
-    if (listData.toDoArray[toDoIndex].priority == true) {
+    if (listData.selectedToDo[toDoIndex].priority == true) {
         priority.checked = true;
     }
-    toDoInputCont.appendChild(priority);
+    priorityInputCont.appendChild(priority);
 
     //List
     let toDoListInputLabel = document.createElement('label');
     toDoListInputLabel.setAttribute('for','toDoListInput');
-    toDoListInputLabel.setAttribute('id','toDolistInputLabel');
+    toDoListInputLabel.setAttribute('id','toDoListInputLabel');
     toDoListInputLabel.innerText = 'List';
     toDoInputCont.appendChild(toDoListInputLabel);
+
+    //List Select Contianer 
+    let listSelectCont = document.createElement('div');
+    listSelectCont.id = 'listSelectCont';
+    toDoInputCont.appendChild(listSelectCont);
+
     let toDoListInput = document.createElement('select');
     toDoListInput.setAttribute('id','toDoListInput');
-    toDoInputCont.appendChild(toDoListInput);
+    listSelectCont.appendChild(toDoListInput);
     for (let i = 0; i<listData.listsArray.length; i++) {
         let option = document.createElement('option');
         option.setAttribute('value',listData.listsArray[i].listId);
@@ -314,36 +367,50 @@ const editToDoInput = (toDoId,toDoIndex,listId) => {
     toDoNotesLabel.setAttribute('id','toDoNotesLabel');
     toDoNotesLabel.innerText = 'Notes'
     toDoInputCont.appendChild(toDoNotesLabel);
-    let toDoNotesInput = document.createElement('input');
+    let toDoNotesInput = document.createElement('textarea');
     toDoNotesInput.setAttribute('id','notesInput');
-    toDoNotesInput.setAttribute('type','text');
-    toDoNotesInput.setAttribute('value', listData.toDoArray[toDoIndex].notes)
+    toDoNotesInput.setAttribute('value', listData.selectedToDo[toDoIndex].notes)
     toDoInputCont.appendChild(toDoNotesInput);
+
+    //Checklist Button Container
+    let checklistBtnCont = document.createElement('div');
+    checklistBtnCont.setAttribute('id','checklistBtnCont');
+    toDoInputCont.appendChild(checklistBtnCont);
     
     //Checklist Button
     let checkListBtn = document.createElement('button');
     checkListBtn.setAttribute('data-btn','checklist');
     checkListBtn.setAttribute('data-listid', listId);
-    checkListBtn.setAttribute('id','checkListBtn');
+    checkListBtn.setAttribute('id','checklistBtn');
     checkListBtn.innerText = 'Add Checklist';
-    toDoInputCont.appendChild(checkListBtn);
+    checklistBtnCont.appendChild(checkListBtn);
 
     //Checklist Container
     let checklistCont = document.createElement('div');
-    checklistCont.setAttribute('id','checklistCont');
+    checklistCont.setAttribute('id','checklistInputCont');
     toDoInputCont.appendChild(checklistCont);
 
-    let checklist = listData.toDoArray[toDoIndex].checklist
+    let checklist = listData.selectedToDo[toDoIndex].checklist
     if (checklist.length > 0) {
         editToDoCheckListPrint(toDoIndex);
     }
+
+    //Button Container 
+    let newToDoInputBtnCont = document.createElement('div');
+    newToDoInputBtnCont.setAttribute('id','newToDoInputCont');
+    toDoInputCont.appendChild(newToDoInputBtnCont);
+    //Cancel Button
+    let cancelBtn = document.createElement('button');
+    cancelBtn.innerText = 'cancel';
+    cancelBtn.setAttribute('data-btn','cancel');
+    newToDoInputBtnCont.appendChild(cancelBtn);
     //Save Button
     let saveBtn = document.createElement('button');
     saveBtn.innerHTML = 'save';
     saveBtn.setAttribute('data-btn', 'saveEditToDo');
     saveBtn.setAttribute('data-listid', listId);
     saveBtn.setAttribute('data-id', toDoId);
-    toDoInputCont.appendChild(saveBtn);
+    newToDoInputBtnCont.appendChild(saveBtn);
 }
 
 export { newToDoInput, toDoCheckListPrint, editToDoInput};

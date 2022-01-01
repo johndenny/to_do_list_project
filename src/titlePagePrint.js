@@ -12,60 +12,87 @@ const titlePage = {
         let titleCont = document.createElement('div');
         titleCont.setAttribute('id', 'titleCont');
         listCont.appendChild(titleCont);
+
+
+
+        //Title Span
         let title = document.createElement('span');
         title.setAttribute('id','listTitle');
         title.setAttribute('class','title')
         titleCont.appendChild(title);
         title.innerHTML = listData.listsArray[listIndex].title;
+        
+        let listBtnEachSymbol = document.createElement('span');
+        listBtnEachSymbol.className = 'title';
+        listBtnEachSymbol.setAttribute('id','listBtnTitleSymbol');
+        listBtnEachSymbol.style.color = listData.listsArray[listIndex].color;
+        listBtnEachSymbol.innerHTML = '&#9679;';
+        titleCont.appendChild(listBtnEachSymbol);
 
-        //New to-do Button
-        let btn = document.createElement('button');
-        btn.setAttribute('data-btn', 'newToDo');
-        btn.setAttribute('id', 'newToDo')
-        btn.setAttribute('data-listid', listId);
-        btn.innerHTML = '+ New To-Do';
-        title.appendChild(btn);
+        //Drop Down Menu
+        let dropDownMenu = document.createElement('div');
+        dropDownMenu.className = 'listDropDownMenu';
+        titleCont.appendChild(dropDownMenu);
+        
 
-        //Edit Button
-        let editBtn = document.createElement('button');
-        editBtn.setAttribute('id','titleEditBtn');
-        editBtn.setAttribute('data-btn','editList');
-        editBtn.setAttribute('data-listId', listId);
-        editBtn.innerHTML = 'Edit';
-        title.appendChild(editBtn);
+        
+        //Button
+        let dropDownList = document.createElement('div');
+        dropDownList.id = 'dropDownList';
+        dropDownList.className = 'listDropDownContent';
+        dropDownMenu.appendChild(dropDownList);
+        let dropDownEdit = document.createElement('span');
+        dropDownEdit.id = 'dropDownEdit';
+        dropDownEdit.className = 'button';
+        dropDownEdit.setAttribute('data-btn','editList');
+        dropDownEdit.setAttribute('data-listid', listId);
+        dropDownEdit.innerText = 'Edit'
+        dropDownList.appendChild(dropDownEdit);
+        let dropDownDelete = document.createElement('span');
+        dropDownDelete.id = 'dropDownEdit';
+        dropDownDelete.className = 'button';
+        dropDownDelete.setAttribute('data-btn','listDelete');
+        dropDownDelete.setAttribute('data-listid', listId);
+        dropDownDelete.innerText = 'Delete';
+        dropDownList.appendChild(dropDownDelete);
+        
+        let dropDownMenuSymbol = document.createElement('span');
+        dropDownMenuSymbol.id = 'dropDownMenuSymbol';
+        dropDownMenuSymbol.className = 'button';
+        dropDownMenuSymbol.setAttribute('data-btn','listDropDownMenu');
+        dropDownMenuSymbol.setAttribute('data-listid', listId);
+        dropDownMenuSymbol.innerHTML = '&#x2022;&#x2022;&#x2022;';
+        dropDownMenu.appendChild(dropDownMenuSymbol);
 
-        //Delete Button
-        let listDeleteBtn = document.createElement('button');
-        listDeleteBtn.setAttribute('id', 'listDeleteBtn');
-        listDeleteBtn.setAttribute('data-btn', 'listDelete');
-        listDeleteBtn.setAttribute('data-listid', listId);
-        listDeleteBtn.innerText = 'delete';
-        title.appendChild(listDeleteBtn);
-
-        //Text Container 
-        let textCont = document.createElement('div');
-        textCont.setAttribute('id','textCont');
-        listCont.appendChild(textCont);
+        if (listData.listsArray[listIndex].desc === '' && listData.listsArray[listIndex].notes === '') {
+            return
+        } else {
+            //Text Container 
+            let textCont = document.createElement('div');
+            textCont.setAttribute('id','textCont');
+            listCont.appendChild(textCont);
 
 
-        //Description
-        let listDesc = listData.listsArray[listIndex].desc;
-        console.log(listDesc);
-        if (listDesc !== '') {
-            let listDescText = document.createElement('span');
-            listDescText.setAttribute('id','listDesc');
-            listDescText.innerText = listDesc;
-            textCont.appendChild(listDescText);
+            //Description
+            let listDesc = listData.listsArray[listIndex].desc;
+            console.log(listDesc);
+            if (listDesc !== '') {
+                let listDescText = document.createElement('span');
+                listDescText.setAttribute('id','listDesc');
+                listDescText.innerText = listDesc;
+                textCont.appendChild(listDescText);
+            }
+            
+            //Notes
+            let listNotes = listData.listsArray[listIndex].notes;
+            if (listNotes !== '') {
+                let listNotesText = document.createElement('span');
+                listNotesText.setAttribute('id','listNotes');
+                listNotesText.innerText = listNotes;
+                textCont.appendChild(listNotesText);
+            }
         }
         
-        //Notes
-        let listNotes = listData.listsArray[listIndex].notes;
-        if (listNotes !== '') {
-            let listNotesText = document.createElement('span');
-            listNotesText.setAttribute('id','listNotes');
-            listNotesText.innerText = listNotes;
-            textCont.appendChild(listNotesText);
-        }
         
 
     },

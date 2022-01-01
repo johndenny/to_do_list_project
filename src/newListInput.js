@@ -14,15 +14,7 @@ const newListInput = () => {
     let listInputCont = document.createElement('div');
     listInputCont.setAttribute('id','listInputCont');
     modalContent.appendChild(listInputCont);
-    
-    //Close Button
-    let modalClose = document.createElement('span');
-    modalClose.setAttribute('id','modalClose');
-    modalClose.setAttribute('class','button');
-    modalClose.setAttribute('data-btn','cancel');
-    modalClose.innerHTML = '&times;';
-    listInputCont.appendChild(modalClose);
-    
+
     //Header
     let listInputHeader = document.createElement('span');
     listInputHeader.setAttribute('id','listInputHeader');
@@ -32,6 +24,7 @@ const newListInput = () => {
     // New List Title Input
     let titleInputLabel = document.createElement('LABEL');
     titleInputLabel.setAttribute('for','listTitleInput');
+    titleInputLabel.setAttribute('id','titleInputLabel');
     titleInputLabel.innerText = 'Title';
     listInputCont.appendChild(titleInputLabel);
     let titleInput = document.createElement('INPUT');
@@ -39,9 +32,21 @@ const newListInput = () => {
     titleInput.setAttribute('type', 'text');
     listInputCont.appendChild(titleInput);
 
+    // New List Color Input
+    let listInputColorLabel = document.createElement('label');
+    listInputColorLabel.id = 'listInputColorLabel';
+    listInputColorLabel.htmlFor = 'listInputColor';
+    listInputColorLabel.innerText = 'Color';
+    listInputCont.appendChild(listInputColorLabel);
+    let listInputColor = document.createElement('input');
+    listInputColor.id = 'listInputColor';
+    listInputColor.type = 'color';
+    listInputCont.appendChild(listInputColor);
+
     // New List Description Input
     let descInputLabel = document.createElement('LABEL');
     descInputLabel.setAttribute('for','listDescInput');
+    descInputLabel.setAttribute('id','descInputLabel');
     descInputLabel.innerText = 'Description';
     listInputCont.appendChild(descInputLabel);
     let descInput = document.createElement('INPUT');
@@ -52,17 +57,23 @@ const newListInput = () => {
     // New List Notes Input
     let notesInputLabel = document.createElement('LABEL');
     notesInputLabel.setAttribute('for','listNotesInput');
+    notesInputLabel.setAttribute('id','notesInputLabel');
     notesInputLabel.innerText = 'Notes';
     listInputCont.appendChild(notesInputLabel)
-    let notesInput = document.createElement('INPUT');
+    let notesInput = document.createElement('textarea');
     notesInput.setAttribute('id', 'listNotesInput');
-    notesInput.setAttribute('type','text');
     listInputCont.appendChild(notesInput);
+
+    //Button Container
     let btnCont = document.createElement('div');
-    btnCont.setAttribute('id','newListBtnCont');
+    btnCont.setAttribute('id','newListInputBtnCont');
     listInputCont.appendChild(btnCont);
+    let cancelBtn = document.createElement('button');
+    cancelBtn.innerText = 'cancel'
+    cancelBtn.setAttribute('data-btn', 'cancel');
+    btnCont.appendChild(cancelBtn);
     let submitBtn = document.createElement('button');
-    submitBtn.innerHTML = 'submit';
+    submitBtn.innerHTML = 'save';
     submitBtn.setAttribute('data-btn', 'submit');
     btnCont.appendChild(submitBtn);
 }
@@ -81,15 +92,7 @@ const editListInput = (listId, listIndex) => {
     let listInputCont = document.createElement('div');
     listInputCont.setAttribute('id','listInputCont');
     modalContent.appendChild(listInputCont);
-    
-    //Close Button
-    let modalClose = document.createElement('span');
-    modalClose.setAttribute('id','modalClose');
-    modalClose.setAttribute('class','button');
-    modalClose.setAttribute('data-btn','cancel');
-    modalClose.innerHTML = '&times;';
-    listInputCont.appendChild(modalClose);
-    
+
     //Header
     let listInputHeader = document.createElement('span');
     listInputHeader.setAttribute('id','listInputHeader');
@@ -100,6 +103,7 @@ const editListInput = (listId, listIndex) => {
     let previousTitle = listData.listsArray[listIndex].title;
     let titleInputLabel = document.createElement('LABEL');
     titleInputLabel.setAttribute('for','listTitleInput');
+    titleInputLabel.id = 'titleInputLabel';
     titleInputLabel.innerText = 'Title';
     listInputCont.appendChild(titleInputLabel);
     let titleInput = document.createElement('INPUT');
@@ -108,10 +112,23 @@ const editListInput = (listId, listIndex) => {
     titleInput.setAttribute('value', previousTitle);
     listInputCont.appendChild(titleInput);
 
+    // New List Color Input
+    let listInputColorLabel = document.createElement('label');
+    listInputColorLabel.id = 'listInputColorLabel';
+    listInputColorLabel.htmlFor = 'listInputColor';
+    listInputColorLabel.innerText = 'Color';
+    listInputCont.appendChild(listInputColorLabel);
+    let listInputColor = document.createElement('input');
+    listInputColor.id = 'listInputColor';
+    listInputColor.type = 'color';
+    listInputColor.value = listData.listsArray[listIndex].color;
+    listInputCont.appendChild(listInputColor);
+
     // New List Description Input
     let previousDescription = listData.listsArray[listIndex].desc;
     let descInputLabel = document.createElement('LABEL');
     descInputLabel.setAttribute('for','listDescInput');
+    descInputLabel.id = 'descInputLabel';
     descInputLabel.innerText = 'Description';
     listInputCont.appendChild(descInputLabel);
     let descInput = document.createElement('INPUT');
@@ -124,23 +141,27 @@ const editListInput = (listId, listIndex) => {
     let previousNotes = listData.listsArray[listIndex].notes;
     let notesInputLabel = document.createElement('LABEL');
     notesInputLabel.setAttribute('for','listNotesInput');
+    notesInputLabel.id = 'notesInputLabel';
     notesInputLabel.innerText = 'Notes';
     listInputCont.appendChild(notesInputLabel)
-    let notesInput = document.createElement('INPUT');
+    let notesInput = document.createElement('textarea');
     notesInput.setAttribute('id', 'listNotesInput');
-    notesInput.setAttribute('type','text');
     notesInput.setAttribute('value', previousNotes);
     listInputCont.appendChild(notesInput);
 
-    //Submit Button
+    //Button Container
     let btnCont = document.createElement('div');
-    btnCont.setAttribute('id','newListBtnCont');
+    btnCont.setAttribute('id','newListInputBtnCont');
     listInputCont.appendChild(btnCont);
-    let saveBtn = document.createElement('button');
-    saveBtn.innerHTML = 'save';
-    saveBtn.setAttribute('data-btn', 'saveList');
-    saveBtn.setAttribute('data-listid', listId);
-    btnCont.appendChild(saveBtn);
-}
+    let cancelBtn = document.createElement('button');
+    cancelBtn.innerText = 'cancel'
+    cancelBtn.setAttribute('data-btn', 'cancel');
+    btnCont.appendChild(cancelBtn);
+    let submitBtn = document.createElement('button');
+    submitBtn.innerHTML = 'save';
+    submitBtn.setAttribute('data-btn', 'saveList');
+    submitBtn.setAttribute('data-listid', listId);
+    btnCont.appendChild(submitBtn);
+    }
 
 export { newListInput, editListInput};

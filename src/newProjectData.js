@@ -42,7 +42,8 @@ const listData = {
         const newListTitle = document.querySelector('#listTitleInput').value;
         const newListDesc = document.querySelector('#listDescInput').value;
         const newListNotes = document.querySelector('#listNotesInput').value;
-        let list = listData.listFactory('',newListTitle,newListDesc,newListNotes,0);
+        const newListColor = document.querySelector('#listInputColor').value;
+        let list = listData.listFactory(newListColor,newListTitle,newListDesc,newListNotes);
         listData.listsArray.push(list);
         console.table(listData.listsArray);
         let listIndex = listData.listsArray.length-1;
@@ -55,7 +56,8 @@ const listData = {
         let descTitle = document.querySelector('#listDescInput').value;
         let listTitle = document.querySelector('#listTitleInput').value;
         let notesTitle = document.querySelector('#listNotesInput').value;
-        console.log(listTitle);
+        const newListColor = document.querySelector('#listInputColor').value;
+        listData.listsArray[listIndex].color = newListColor;
         listData.listsArray[listIndex].title = listTitle;
         listData.listsArray[listIndex].desc = descTitle;
         listData.listsArray[listIndex].notes = notesTitle;
@@ -106,21 +108,21 @@ const listData = {
             let checklistFactory = listData.checklistFactory(listId,checklistText);
             checklistArr.push(checklistFactory);
         }
-        let listTitle = listData.listsArray[listIndex].title;
         let newToDo = document.querySelector('#toDoInput').value;
         let toDoDate = document.querySelector('#toDoDate').value;
         let toDoPriority = document.querySelector('#toDoPriority').checked;
         let toDoNotes = document.querySelector('#notesInput').value;
-        let toDo = listData.toDoFactory(listId,listTitle,newToDo,toDoNotes,checklistArr,toDoDate,toDoPriority);
+        let toDo = listData.toDoFactory(listId,newToDo,toDoNotes,checklistArr,toDoDate,toDoPriority);
         listData.toDoArray.push(toDo);
         listData.newToDoPrint(listIndex,listId);
-        let newIndex = listData.findListId(listId, listData.listsArray);
-        listPagePrint(newIndex,listId);
-        console.table(listData.toDoArray);
+        // let newIndex = listData.findListId(listId, listData.listsArray);
+        // listPagePrint(newIndex,listId);
+        // console.table(listData.toDoArray);
     },
-    editToDoData: (toDoIndex) => {
+    editToDoData: (toDoId) => {
         let listId = parseInt(listData.findListOptionId());
         let listIndex = parseInt(listData.findListId(listId,listData.listsArray));
+        let toDoIndex = parseInt(listData.findId(toDoId,listData.toDoArray));
         let checklist = document.querySelectorAll('#checklistInput');
         let checklistArr = [];
         if (listData.toDoArray[toDoIndex].checklist.length === 0) {
@@ -200,16 +202,46 @@ const listData = {
         }
         
     },
-    listFactory: (date,title,desc,notes) => {
+    inboxToDoSort: () => {
+        let overdue = listData.toDoArray.filter(function(arr){
+            return arr.daysTilDue < 0;
+        });
+        let dueToday = listData.toDoArray.filter(function(arr){
+            return arr.daysTilDue === 0;
+        });
+        let inboxArr = overdue.concat(dueToday);
+        listData.selectedToDo = inboxArr;
+        listData.dateSort(listData.selectedToDo);
+        console.table(listData.selectedToDo);
+        const inboxDueToday = document.querySelector('#inboxDueToday');
+        const inboxOverdue = document.querySelector('#inboxOverdue');
+        inboxDueToday.innerText = dueToday.length;
+        if (overdue.length === 0) {
+            inboxOverdue.innerText = '';
+        } else {
+            inboxOverdue.innerText = overdue.length;
+        }
+    },
+    thisWeekSort: () => {
+        let nextWeek = listData.toDoArray.filter(function(arr){
+            return arr.daysTilDue > 0 && arr.daysTilDue < 7;
+        })
+        listData.selectedToDo = nextWeek;
+        listData.dateSort(listData.selectedToDo);
+        const nextWeekNumCont = document.querySelector('#thisWeekNum');
+        nextWeekNumCont.innerText = nextWeek.length;
+    }, 
+    listFactory: (color,title,desc,notes) => {
+        let date = '';
         let percentComplete = 0;
         let listId = Math.floor(Math.random()*999);
         let copyCheck = listData.findListId(listId,listData.listsArray);
         while (copyCheck !== -1) {
             return listId = Math.floor(Math.random()*999);
         }
-        return {listId,date,title,desc,notes,percentComplete};
+        return {listId,date,color,title,desc,notes,percentComplete};
     },
-    toDoFactory: (listId,listTitle,text,notes,checklist,dateDash,priority) => {
+    toDoFactory: (listId,text,notes,checklist,dateDash,priority) => {
         let percentComplete = 0;
         let status = 'pending';
         let date = parseISO(dateDash);
@@ -224,7 +256,7 @@ const listData = {
         while (copyCheck !== -1) {
             return id = Math.floor(Math.random()*999);
         }
-        return {id,listId,listTitle,text,notes,checklist,date,daysTilDue,status,priority,percentComplete};
+        return {id,listId,text,notes,checklist,date,daysTilDue,status,priority,percentComplete};
     },
     checklistFactory: (toDoId,text) => {
         let status = 'pending';

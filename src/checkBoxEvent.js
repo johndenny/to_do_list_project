@@ -1,7 +1,7 @@
 import { listPagePrint } from './listPagePrint';
 import { listData } from './newProjectData';
 import { btnEvents } from './index';
-import { inboxPagePrint } from './inboxPagePrint';
+import { inboxPagePrint, titleWithToDoPagePrint } from './inboxPagePrint';
 
 const checkBoxValid = () => {
     const checkbox = document.querySelectorAll('Input#toDo');
@@ -55,9 +55,9 @@ const checkBoxValid = () => {
                 } else if (listData.toDoArray[toDoIndex].percentComplete < 100) {
                     listData.toDoArray[toDoIndex].status = 'pending';
                 }
-                let inboxTitle = document.querySelector('#inboxTitle');
-                if (inboxTitle !== null) {
-                    inboxPagePrint();
+                let inboxTitle = document.querySelector('#title');
+                if (inboxTitle.innerText === 'Inbox') {
+                    titleWithToDoPagePrint('Inbox');
                 } else {
                     listPagePrint(listIndex,listId);
                 }
