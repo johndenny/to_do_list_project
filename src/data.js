@@ -1,5 +1,5 @@
-import { listPagePrint } from './pagePrint';
-import { differenceInCalendarDays } from 'date-fns';
+import { listPagePrint, newListPrint } from './pagePrint';
+import { compareDesc, differenceInCalendarDays } from 'date-fns';
 import { parseISO } from 'date-fns';
 import { compareAsc } from 'date-fns';
 
@@ -7,9 +7,28 @@ const listData = {
     listsArray: [],
     toDoArray: [],
     selectedToDo: [],
+    historyToDo: [],
+    dateUpdate: () => {
+        for (let i=0; i<listData.toDoArray.length; i++){
+            let arraydate = parseISO(listData.toDoArray[i].date);
+            let currentDate = new Date();
+            let daysUntilDue = differenceInCalendarDays(new Date(arraydate),new Date(currentDate));
+            listData.toDoArray[i].daysTilDue = daysUntilDue;
+            listData.toDoArray[i].date = arraydate;
+        }
+        for (let j=0; j<listData.listsArray.length; j++) {
+            let listDate = parseISO(listData.listsArray[j].date);
+            listData.listsArray[j].date = listDate;
+        }
+    },
     dateSort: (arr) => {
         arr.sort(function (a,b) {
             return compareAsc(a.date,b.date);
+        });
+    },
+    dateSortDesc: (arr) => {
+        arr.sort(function(a,b) {
+            return compareDesc(a.date,b.date);
         });
     },
     completeToDoSort: (listIndex,listId) => {
@@ -45,6 +64,7 @@ const listData = {
         let listId = listData.listsArray[listIndex].listId;
         listData.newToDoPrint(listIndex,listId);
         listPagePrint(listIndex,listId);
+        localStorage.setItem('listsarray', JSON.stringify(listData.listsArray));
     },
     listEditData: (listIndex, listId) => {
         console.log(listIndex,listId);
@@ -57,12 +77,7 @@ const listData = {
         listData.listsArray[listIndex].desc = descTitle;
         listData.listsArray[listIndex].notes = notesTitle;
         console.table(listData.listsArray);
-    },
-    listEditDescData: (listIndex, listId) => {
-        let listDesc = document.querySelector('#editDescInput').value;
-            listData.listsArray[listIndex].desc = listDesc;
-            console.table(listData.listsArray);
-            listPagePrint(listIndex,listId);
+        localStorage.setItem('listsarray', JSON.stringify(listData.listsArray));
     },
     listDelete: (listIndex,listId) => {
         listData.listsArray.splice(listIndex,1);
@@ -72,13 +87,16 @@ const listData = {
             }      
         }
         console.table(listData.toDoArray);
+        localStorage.setItem('listarray', JSON.stringify(listData.listsArray));
+        localStorage.setItem('todoarray', JSON.stringify(listData.toDoArray));
     },
     toDoDelete: (toDoId) => {
         for (let i = listData.toDoArray.length-1; i >=0; i--) {
             if (listData.toDoArray[i].id === toDoId) {
                 listData.toDoArray.splice(i,1);
             }      
-        }    
+        }
+        localStorage.setItem('todoarray', JSON.stringify(listData.toDoArray));
         console.table(listData.toDoArray);  
     },
     findListOptionId: () => {
@@ -107,10 +125,12 @@ const listData = {
         let toDoNotes = document.querySelector('#notesInput').value;
         let toDo = listData.toDoFactory(listId,newToDo,toDoNotes,checklistArr,toDoDate,toDoPriority);
         listData.toDoArray.push(toDo);
-        listData.newToDoPrint(listIndex,listId);
         let newIndex = listData.findListId(listId, listData.listsArray);
+        listData.newToDoPrint(newIndex,listId);
         listPagePrint(newIndex,listId);
-        console.table(listData.toDoArray);
+        listData.listClosestDate();
+        newListPrint();
+        localStorage.setItem('todoarray', JSON.stringify(listData.toDoArray));
     },
     editToDoData: (toDoId) => {
         let listId = parseInt(listData.findListOptionId());
@@ -156,9 +176,13 @@ const listData = {
         } else {
             listData.toDoArray[toDoIndex].priority = false;
         }
-        listData.newToDoPrint(listIndex,listId);
+        
         let newIndex = listData.findListId(listId, listData.listsArray);
+        listData.newToDoPrint(newIndex,listId);
         listPagePrint(newIndex,listId);
+        listData.listClosestDate();
+        newListPrint();
+        localStorage.setItem('todoarray', JSON.stringify(listData.toDoArray));
         console.table(listData.toDoArray);
     },
     findId: (num,arr) => {
@@ -189,11 +213,26 @@ const listData = {
         } else {
             listData.selectedToDo = result;
             listData.dateSort(listData.selectedToDo);
-            let closestDate = listData.selectedToDo[0].date;
-            listData.listsArray[listIndex].date = closestDate;
-            listData.dateSort(listData.listsArray);
         }
         
+    },
+    listClosestDate: () => {
+        for (let i = 0; i<listData.listsArray.length; i++) {
+
+            let listToDos = listData.toDoArray.filter(function(arr){
+            return arr.listId === listData.listsArray[i].listId;
+            });
+            console.table(listToDos);
+            if (listToDos.length === 0) {
+                return
+            } else {
+                listData.dateSort(listToDos);
+                listData.listsArray[i].date = listToDos[0].date;
+                listData.dateSort(listData.listsArray);
+            }
+
+        }
+        console.table(listData.listsArray);
     },
     inboxToDoSort: () => {
         let overdue = listData.toDoArray.filter(function(arr){
@@ -205,25 +244,35 @@ const listData = {
         let inboxArr = overdue.concat(dueToday);
         listData.selectedToDo = inboxArr;
         listData.dateSort(listData.selectedToDo);
-        console.table(listData.selectedToDo);
-        const inboxDueToday = document.querySelector('#inboxDueToday');
-        const inboxOverdue = document.querySelector('#inboxOverdue');
-        inboxDueToday.innerText = dueToday.length;
-        if (overdue.length === 0) {
-            inboxOverdue.innerText = '';
-        } else {
-            inboxOverdue.innerText = overdue.length;
-        }
     },
     thisWeekSort: () => {
         let nextWeek = listData.toDoArray.filter(function(arr){
             return arr.daysTilDue > 0 && arr.daysTilDue < 7;
-        })
+        });
         listData.selectedToDo = nextWeek;
         listData.dateSort(listData.selectedToDo);
-        const nextWeekNumCont = document.querySelector('#thisWeekNum');
-        nextWeekNumCont.innerText = nextWeek.length;
-    }, 
+    },
+    listToDoLength: (listId) => {
+        let listResult = listData.toDoArray.filter(function(arr){
+            return arr.listId === listId;
+        });
+        return listResult.length;
+    },
+    inboxToDoLength: () => {
+        let overdue = listData.toDoArray.filter(function(arr){
+            return arr.daysTilDue < 0;
+        });
+        let dueToday = listData.toDoArray.filter(function(arr){
+            return arr.daysTilDue === 0;
+        });
+        return [overdue.length,dueToday.length];
+    },
+    thisWeekLength: () => {
+        let nextWeek = listData.toDoArray.filter(function(arr){
+            return arr.daysTilDue > 0 && arr.daysTilDue < 7;
+        });
+        return nextWeek.length;
+    },
     listFactory: (color,title,desc,notes) => {
         let date = '';
         let percentComplete = 0;
@@ -255,6 +304,31 @@ const listData = {
         let status = 'pending';
         let checklistId = Math.floor(Math.random()*999);
         return {checklistId,toDoId,text,status}
+    }
+}
+
+function storageAvailable(type) {
+    var storage;
+    try {
+        storage = window[type];
+        var x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    }
+    catch(e) {
+        return e instanceof DOMException && (
+            // everything except Firefox
+            e.code === 22 ||
+            // Firefox
+            e.code === 1014 ||
+            // test name field too, because code might not be present
+            // everything except Firefox
+            e.name === 'QuotaExceededError' ||
+            // Firefox
+            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+            // acknowledge QuotaExceededError only if there's something already stored
+            (storage && storage.length !== 0);
     }
 }
 
